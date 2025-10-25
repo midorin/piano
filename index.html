@@ -1,601 +1,417 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ピアノスケール - 指使い表</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            padding: 40px;
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 2.5em;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 1.1em;
-        }
-
-        .key-selector {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 10px;
-            margin-bottom: 40px;
-        }
-
-        .key-button {
-            padding: 15px 20px;
-            border: 2px solid #667eea;
-            background: white;
-            color: #667eea;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-
-        .key-button:hover {
-            background: #667eea;
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .key-button.active {
-            background: #667eea;
-            color: white;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .scale-display {
-            display: none;
-        }
-
-        .scale-display.active {
-            display: block;
-        }
-
-        .hand-section {
-            margin-bottom: 30px;
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 15px;
-        }
-
-        .hand-title {
-            font-size: 1.5em;
-            color: #333;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .hand-icon {
-            font-size: 1.2em;
-        }
-
-        .scale-info {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .info-card {
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            border-left: 4px solid #667eea;
-        }
-
-        .info-label {
-            font-size: 0.9em;
-            color: #666;
-            margin-bottom: 5px;
-        }
-
-        .info-value {
-            font-size: 1.1em;
-            color: #333;
-            font-weight: bold;
-        }
-
-        .notes-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .note-block {
-            background: white;
-            border: 2px solid #667eea;
-            border-radius: 8px;
-            padding: 10px 15px;
-            min-width: 80px;
-            text-align: center;
-        }
-
-        .note-name {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 5px;
-        }
-
-        .finger-number {
-            font-size: 1.5em;
-            color: #667eea;
-            font-weight: bold;
-        }
-
-        .octave-label {
-            font-size: 0.8em;
-            color: #999;
-            margin-top: 3px;
-        }
-
-        .direction-indicator {
-            display: inline-block;
-            padding: 5px 10px;
-            background: #764ba2;
-            color: white;
-            border-radius: 5px;
-            font-size: 0.9em;
-            margin-left: 10px;
-        }
-
-        .ascending {
-            background: #4CAF50;
-        }
-
-        .descending {
-            background: #FF9800;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 20px;
-            }
-
-            h1 {
-                font-size: 1.8em;
-            }
-
-            .key-selector {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ピアノスケール v7（Tone.jsピアノ）</title>
+  <style>
+    :root{--bg1:#667eea;--bg2:#764ba2;--ink:#1f2937;--muted:#6b7280;--brand:#6366f1;--white:#fff;--border:#e5e7eb;--R:#10b981;--L:#ef4444;--B:#8b5cf6;--now:#111827}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;background:linear-gradient(135deg,var(--bg1),var(--bg2));font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto;color:var(--ink);padding:24px}
+    .card{max-width:1200px;margin:0 auto;background:var(--white);border-radius:16px;padding:22px;box-shadow:0 18px 50px rgba(0,0,0,.25)}
+    h1{margin:0 0 6px;font-size:clamp(22px,3.5vw,32px)}
+    .sub{color:var(--muted);margin-bottom:10px}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .keys{display:flex;gap:8px;flex-wrap:wrap}
+    .key{padding:9px 14px;border:2px solid var(--brand);border-radius:10px;background:#fff;color:var(--brand);font-weight:700;cursor:pointer}
+    .key.active,.key:hover{background:var(--brand);color:#fff}
+    .controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-left:auto}
+    .pill{padding:6px 10px;border-radius:999px;background:#f3f4f6;color:#374151;font-size:14px}
+    input[type="range"]{accent-color:var(--brand)}
+    .buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+    .btn{padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:#fff;cursor:pointer}
+    .play{background:#16a34a;border-color:#15803d;color:#fff}
+    .stop{background:#ef4444;border-color:#b91c1c;color:#fff}
+    .mode{background:#0ea5e9;border-color:#0284c7;color:#fff}
+    .grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:14px}
+    .kb{background:#f9fafb;border:1px solid var(--border);border-radius:12px;padding:12px}
+    .legend{display:flex;gap:12px;flex-wrap:wrap;color:#374151;font-size:14px;margin-bottom:6px;align-items:center}
+    .dot{width:12px;height:12px;border-radius:50%;display:inline-block;margin-right:6px;vertical-align:middle}
+    .dot-R{background:var(--R)} .dot-L{background:var(--L)} .dot-B{background:var(--B)}
+    svg{width:100%;height:auto;display:block}
+    .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+    .block{border-left:4px solid var(--brand);border:1px solid var(--border);border-radius:10px;padding:10px;background:#fff}
+    .block h3{margin:0 0 8px;font-size:16px;display:flex;gap:8px;align-items:center}
+    .chips{display:flex;gap:6px;flex-wrap:wrap}
+    .chip{border:1px solid var(--border);padding:6px 8px;border-radius:8px;background:#fff}
+    .warn{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;padding:10px;border-radius:8px}
+    .uploader{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .kbd{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#111;color:#fff;padding:1px 6px;border-radius:6px}
+    .foot{font-size:12px;color:#6b7280}
+    .status{font-size:12px;color:#6b7280;margin-left:auto}
+  </style>
+  <!-- Tone.js (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/tone/build/Tone.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>🎹 ピアノスケール指使い表</h1>
-        <p class="subtitle">2オクターブ・メジャースケール（長調）</p>
+  <div class="card">
+    <h1>🎹 ピアノスケール v7</h1>
+    <div class="sub">88鍵フル表示。<strong>正弦波 / ピアノ音（Tone.js Sampler）</strong>を切替。外部JSONで運指差し替え。</div>
 
-        <div class="key-selector" id="keySelector">
-            <!-- Keys will be populated by JavaScript -->
-        </div>
-
-        <div id="scaleDisplay">
-            <!-- Scale information will be displayed here -->
-        </div>
+    <div class="row">
+      <div class="keys" id="keyButtons"></div>
+      <div class="controls">
+        <span class="pill">速度: <span id="tempoVal">120</span>bpm</span>
+        <input id="tempo" type="range" min="60" max="200" value="120" />
+        <button class="btn mode" id="toggleMode">音色: 正弦波</button>
+      </div>
     </div>
 
-    <script>
-        // Scale fingerings for 2 octaves (major scales)
-        // Format: [note, finger, octave]
-        const scaleFingerings = {
-            'C': {
-                name: 'Cメジャー (ハ長調)',
-                rightAscending: [
-                    ['C', 1, 1], ['D', 2, 1], ['E', 3, 1], ['F', 4, 1], ['G', 5, 1],
-                    ['A', 1, 2], ['B', 2, 2], ['C', 3, 2], ['D', 4, 2], ['E', 5, 2],
-                    ['F', 1, 3], ['G', 2, 3], ['A', 3, 3], ['B', 4, 3], ['C', 5, 3]
-                ],
-                rightDescending: [
-                    ['C', 5, 3], ['B', 4, 3], ['A', 3, 3], ['G', 2, 3], ['F', 1, 3],
-                    ['E', 5, 2], ['D', 4, 2], ['C', 3, 2], ['B', 2, 2], ['A', 1, 2],
-                    ['G', 5, 1], ['F', 4, 1], ['E', 3, 1], ['D', 2, 1], ['C', 1, 1]
-                ],
-                leftAscending: [
-                    ['C', 5, 1], ['D', 4, 1], ['E', 3, 1], ['F', 2, 1], ['G', 1, 1],
-                    ['A', 3, 2], ['B', 2, 2], ['C', 1, 2], ['D', 4, 2], ['E', 3, 2],
-                    ['F', 2, 2], ['G', 1, 2], ['A', 3, 3], ['B', 2, 3], ['C', 1, 3]
-                ],
-                leftDescending: [
-                    ['C', 1, 3], ['B', 2, 3], ['A', 3, 3], ['G', 1, 2], ['F', 2, 2],
-                    ['E', 3, 2], ['D', 4, 2], ['C', 1, 2], ['B', 2, 2], ['A', 3, 2],
-                    ['G', 1, 1], ['F', 2, 1], ['E', 3, 1], ['D', 4, 1], ['C', 5, 1]
-                ]
-            },
-            'G': {
-                name: 'Gメジャー (ト長調)',
-                rightAscending: [
-                    ['G', 1, 1], ['A', 2, 1], ['B', 3, 1], ['C', 4, 1], ['D', 5, 1],
-                    ['E', 1, 2], ['F♯', 2, 2], ['G', 3, 2], ['A', 4, 2], ['B', 5, 2],
-                    ['C', 1, 3], ['D', 2, 3], ['E', 3, 3], ['F♯', 4, 3], ['G', 5, 3]
-                ],
-                rightDescending: [
-                    ['G', 5, 3], ['F♯', 4, 3], ['E', 3, 3], ['D', 2, 3], ['C', 1, 3],
-                    ['B', 5, 2], ['A', 4, 2], ['G', 3, 2], ['F♯', 2, 2], ['E', 1, 2],
-                    ['D', 5, 1], ['C', 4, 1], ['B', 3, 1], ['A', 2, 1], ['G', 1, 1]
-                ],
-                leftAscending: [
-                    ['G', 5, 1], ['A', 4, 1], ['B', 3, 1], ['C', 2, 1], ['D', 1, 1],
-                    ['E', 3, 2], ['F♯', 2, 2], ['G', 1, 2], ['A', 4, 2], ['B', 3, 2],
-                    ['C', 2, 2], ['D', 1, 2], ['E', 3, 3], ['F♯', 2, 3], ['G', 1, 3]
-                ],
-                leftDescending: [
-                    ['G', 1, 3], ['F♯', 2, 3], ['E', 3, 3], ['D', 1, 2], ['C', 2, 2],
-                    ['B', 3, 2], ['A', 4, 2], ['G', 1, 2], ['F♯', 2, 2], ['E', 3, 2],
-                    ['D', 1, 1], ['C', 2, 1], ['B', 3, 1], ['A', 4, 1], ['G', 5, 1]
-                ]
-            },
-            'D': {
-                name: 'Dメジャー (ニ長調)',
-                rightAscending: [
-                    ['D', 1, 1], ['E', 2, 1], ['F♯', 3, 1], ['G', 4, 1], ['A', 5, 1],
-                    ['B', 1, 2], ['C♯', 2, 2], ['D', 3, 2], ['E', 4, 2], ['F♯', 5, 2],
-                    ['G', 1, 3], ['A', 2, 3], ['B', 3, 3], ['C♯', 4, 3], ['D', 5, 3]
-                ],
-                rightDescending: [
-                    ['D', 5, 3], ['C♯', 4, 3], ['B', 3, 3], ['A', 2, 3], ['G', 1, 3],
-                    ['F♯', 5, 2], ['E', 4, 2], ['D', 3, 2], ['C♯', 2, 2], ['B', 1, 2],
-                    ['A', 5, 1], ['G', 4, 1], ['F♯', 3, 1], ['E', 2, 1], ['D', 1, 1]
-                ],
-                leftAscending: [
-                    ['D', 5, 1], ['E', 4, 1], ['F♯', 3, 1], ['G', 2, 1], ['A', 1, 1],
-                    ['B', 3, 2], ['C♯', 2, 2], ['D', 1, 2], ['E', 4, 2], ['F♯', 3, 2],
-                    ['G', 2, 2], ['A', 1, 2], ['B', 3, 3], ['C♯', 2, 3], ['D', 1, 3]
-                ],
-                leftDescending: [
-                    ['D', 1, 3], ['C♯', 2, 3], ['B', 3, 3], ['A', 1, 2], ['G', 2, 2],
-                    ['F♯', 3, 2], ['E', 4, 2], ['D', 1, 2], ['C♯', 2, 2], ['B', 3, 2],
-                    ['A', 1, 1], ['G', 2, 1], ['F♯', 3, 1], ['E', 4, 1], ['D', 5, 1]
-                ]
-            },
-            'A': {
-                name: 'Aメジャー (イ長調)',
-                rightAscending: [
-                    ['A', 1, 1], ['B', 2, 1], ['C♯', 3, 1], ['D', 4, 1], ['E', 5, 1],
-                    ['F♯', 1, 2], ['G♯', 2, 2], ['A', 3, 2], ['B', 4, 2], ['C♯', 5, 2],
-                    ['D', 1, 3], ['E', 2, 3], ['F♯', 3, 3], ['G♯', 4, 3], ['A', 5, 3]
-                ],
-                rightDescending: [
-                    ['A', 5, 3], ['G♯', 4, 3], ['F♯', 3, 3], ['E', 2, 3], ['D', 1, 3],
-                    ['C♯', 5, 2], ['B', 4, 2], ['A', 3, 2], ['G♯', 2, 2], ['F♯', 1, 2],
-                    ['E', 5, 1], ['D', 4, 1], ['C♯', 3, 1], ['B', 2, 1], ['A', 1, 1]
-                ],
-                leftAscending: [
-                    ['A', 5, 1], ['B', 4, 1], ['C♯', 3, 1], ['D', 2, 1], ['E', 1, 1],
-                    ['F♯', 3, 2], ['G♯', 2, 2], ['A', 1, 2], ['B', 4, 2], ['C♯', 3, 2],
-                    ['D', 2, 2], ['E', 1, 2], ['F♯', 3, 3], ['G♯', 2, 3], ['A', 1, 3]
-                ],
-                leftDescending: [
-                    ['A', 1, 3], ['G♯', 2, 3], ['F♯', 3, 3], ['E', 1, 2], ['D', 2, 2],
-                    ['C♯', 3, 2], ['B', 4, 2], ['A', 1, 2], ['G♯', 2, 2], ['F♯', 3, 2],
-                    ['E', 1, 1], ['D', 2, 1], ['C♯', 3, 1], ['B', 4, 1], ['A', 5, 1]
-                ]
-            },
-            'E': {
-                name: 'Eメジャー (ホ長調)',
-                rightAscending: [
-                    ['E', 1, 1], ['F♯', 2, 1], ['G♯', 3, 1], ['A', 4, 1], ['B', 5, 1],
-                    ['C♯', 1, 2], ['D♯', 2, 2], ['E', 3, 2], ['F♯', 4, 2], ['G♯', 5, 2],
-                    ['A', 1, 3], ['B', 2, 3], ['C♯', 3, 3], ['D♯', 4, 3], ['E', 5, 3]
-                ],
-                rightDescending: [
-                    ['E', 5, 3], ['D♯', 4, 3], ['C♯', 3, 3], ['B', 2, 3], ['A', 1, 3],
-                    ['G♯', 5, 2], ['F♯', 4, 2], ['E', 3, 2], ['D♯', 2, 2], ['C♯', 1, 2],
-                    ['B', 5, 1], ['A', 4, 1], ['G♯', 3, 1], ['F♯', 2, 1], ['E', 1, 1]
-                ],
-                leftAscending: [
-                    ['E', 5, 1], ['F♯', 4, 1], ['G♯', 3, 1], ['A', 2, 1], ['B', 1, 1],
-                    ['C♯', 3, 2], ['D♯', 2, 2], ['E', 1, 2], ['F♯', 4, 2], ['G♯', 3, 2],
-                    ['A', 2, 2], ['B', 1, 2], ['C♯', 3, 3], ['D♯', 2, 3], ['E', 1, 3]
-                ],
-                leftDescending: [
-                    ['E', 1, 3], ['D♯', 2, 3], ['C♯', 3, 3], ['B', 1, 2], ['A', 2, 2],
-                    ['G♯', 3, 2], ['F♯', 4, 2], ['E', 1, 2], ['D♯', 2, 2], ['C♯', 3, 2],
-                    ['B', 1, 1], ['A', 2, 1], ['G♯', 3, 1], ['F♯', 4, 1], ['E', 5, 1]
-                ]
-            },
-            'B': {
-                name: 'Bメジャー (ロ長調)',
-                rightAscending: [
-                    ['B', 1, 1], ['C♯', 2, 1], ['D♯', 3, 1], ['E', 4, 1], ['F♯', 5, 1],
-                    ['G♯', 1, 2], ['A♯', 2, 2], ['B', 3, 2], ['C♯', 4, 2], ['D♯', 5, 2],
-                    ['E', 1, 3], ['F♯', 2, 3], ['G♯', 3, 3], ['A♯', 4, 3], ['B', 5, 3]
-                ],
-                rightDescending: [
-                    ['B', 5, 3], ['A♯', 4, 3], ['G♯', 3, 3], ['F♯', 2, 3], ['E', 1, 3],
-                    ['D♯', 5, 2], ['C♯', 4, 2], ['B', 3, 2], ['A♯', 2, 2], ['G♯', 1, 2],
-                    ['F♯', 5, 1], ['E', 4, 1], ['D♯', 3, 1], ['C♯', 2, 1], ['B', 1, 1]
-                ],
-                leftAscending: [
-                    ['B', 4, 1], ['C♯', 3, 1], ['D♯', 2, 1], ['E', 1, 1], ['F♯', 4, 1],
-                    ['G♯', 3, 2], ['A♯', 2, 2], ['B', 1, 2], ['C♯', 4, 2], ['D♯', 3, 2],
-                    ['E', 2, 2], ['F♯', 1, 2], ['G♯', 3, 3], ['A♯', 2, 3], ['B', 1, 3]
-                ],
-                leftDescending: [
-                    ['B', 1, 3], ['A♯', 2, 3], ['G♯', 3, 3], ['F♯', 1, 2], ['E', 2, 2],
-                    ['D♯', 3, 2], ['C♯', 4, 2], ['B', 1, 2], ['A♯', 2, 2], ['G♯', 3, 2],
-                    ['F♯', 4, 1], ['E', 1, 1], ['D♯', 2, 1], ['C♯', 3, 1], ['B', 4, 1]
-                ]
-            },
-            'F♯': {
-                name: 'F♯メジャー (嬰ヘ長調)',
-                rightAscending: [
-                    ['F♯', 1, 1], ['G♯', 2, 1], ['A♯', 3, 1], ['B', 4, 1], ['C♯', 5, 1],
-                    ['D♯', 1, 2], ['E♯', 2, 2], ['F♯', 3, 2], ['G♯', 4, 2], ['A♯', 5, 2],
-                    ['B', 1, 3], ['C♯', 2, 3], ['D♯', 3, 3], ['E♯', 4, 3], ['F♯', 5, 3]
-                ],
-                rightDescending: [
-                    ['F♯', 5, 3], ['E♯', 4, 3], ['D♯', 3, 3], ['C♯', 2, 3], ['B', 1, 3],
-                    ['A♯', 5, 2], ['G♯', 4, 2], ['F♯', 3, 2], ['E♯', 2, 2], ['D♯', 1, 2],
-                    ['C♯', 5, 1], ['B', 4, 1], ['A♯', 3, 1], ['G♯', 2, 1], ['F♯', 1, 1]
-                ],
-                leftAscending: [
-                    ['F♯', 4, 1], ['G♯', 3, 1], ['A♯', 2, 1], ['B', 1, 1], ['C♯', 4, 1],
-                    ['D♯', 3, 2], ['E♯', 2, 2], ['F♯', 1, 2], ['G♯', 4, 2], ['A♯', 3, 2],
-                    ['B', 2, 2], ['C♯', 1, 2], ['D♯', 3, 3], ['E♯', 2, 3], ['F♯', 1, 3]
-                ],
-                leftDescending: [
-                    ['F♯', 1, 3], ['E♯', 2, 3], ['D♯', 3, 3], ['C♯', 1, 2], ['B', 2, 2],
-                    ['A♯', 3, 2], ['G♯', 4, 2], ['F♯', 1, 2], ['E♯', 2, 2], ['D♯', 3, 2],
-                    ['C♯', 4, 1], ['B', 1, 1], ['A♯', 2, 1], ['G♯', 3, 1], ['F♯', 4, 1]
-                ]
-            },
-            'C♯': {
-                name: 'C♯メジャー (嬰ハ長調)',
-                rightAscending: [
-                    ['C♯', 1, 1], ['D♯', 2, 1], ['E♯', 3, 1], ['F♯', 4, 1], ['G♯', 5, 1],
-                    ['A♯', 1, 2], ['B♯', 2, 2], ['C♯', 3, 2], ['D♯', 4, 2], ['E♯', 5, 2],
-                    ['F♯', 1, 3], ['G♯', 2, 3], ['A♯', 3, 3], ['B♯', 4, 3], ['C♯', 5, 3]
-                ],
-                rightDescending: [
-                    ['C♯', 5, 3], ['B♯', 4, 3], ['A♯', 3, 3], ['G♯', 2, 3], ['F♯', 1, 3],
-                    ['E♯', 5, 2], ['D♯', 4, 2], ['C♯', 3, 2], ['B♯', 2, 2], ['A♯', 1, 2],
-                    ['G♯', 5, 1], ['F♯', 4, 1], ['E♯', 3, 1], ['D♯', 2, 1], ['C♯', 1, 1]
-                ],
-                leftAscending: [
-                    ['C♯', 5, 1], ['D♯', 4, 1], ['E♯', 3, 1], ['F♯', 2, 1], ['G♯', 1, 1],
-                    ['A♯', 3, 2], ['B♯', 2, 2], ['C♯', 1, 2], ['D♯', 4, 2], ['E♯', 3, 2],
-                    ['F♯', 2, 2], ['G♯', 1, 2], ['A♯', 3, 3], ['B♯', 2, 3], ['C♯', 1, 3]
-                ],
-                leftDescending: [
-                    ['C♯', 1, 3], ['B♯', 2, 3], ['A♯', 3, 3], ['G♯', 1, 2], ['F♯', 2, 2],
-                    ['E♯', 3, 2], ['D♯', 4, 2], ['C♯', 1, 2], ['B♯', 2, 2], ['A♯', 3, 2],
-                    ['G♯', 1, 1], ['F♯', 2, 1], ['E♯', 3, 1], ['D♯', 4, 1], ['C♯', 5, 1]
-                ]
-            },
-            'F': {
-                name: 'Fメジャー (ヘ長調)',
-                rightAscending: [
-                    ['F', 1, 1], ['G', 2, 1], ['A', 3, 1], ['B♭', 4, 1], ['C', 5, 1],
-                    ['D', 1, 2], ['E', 2, 2], ['F', 3, 2], ['G', 4, 2], ['A', 5, 2],
-                    ['B♭', 1, 3], ['C', 2, 3], ['D', 3, 3], ['E', 4, 3], ['F', 5, 3]
-                ],
-                rightDescending: [
-                    ['F', 5, 3], ['E', 4, 3], ['D', 3, 3], ['C', 2, 3], ['B♭', 1, 3],
-                    ['A', 5, 2], ['G', 4, 2], ['F', 3, 2], ['E', 2, 2], ['D', 1, 2],
-                    ['C', 5, 1], ['B♭', 4, 1], ['A', 3, 1], ['G', 2, 1], ['F', 1, 1]
-                ],
-                leftAscending: [
-                    ['F', 5, 1], ['G', 4, 1], ['A', 3, 1], ['B♭', 2, 1], ['C', 1, 1],
-                    ['D', 3, 2], ['E', 2, 2], ['F', 1, 2], ['G', 4, 2], ['A', 3, 2],
-                    ['B♭', 2, 2], ['C', 1, 2], ['D', 3, 3], ['E', 2, 3], ['F', 1, 3]
-                ],
-                leftDescending: [
-                    ['F', 1, 3], ['E', 2, 3], ['D', 3, 3], ['C', 1, 2], ['B♭', 2, 2],
-                    ['A', 3, 2], ['G', 4, 2], ['F', 1, 2], ['E', 2, 2], ['D', 3, 2],
-                    ['C', 1, 1], ['B♭', 2, 1], ['A', 3, 1], ['G', 4, 1], ['F', 5, 1]
-                ]
-            },
-            'B♭': {
-                name: 'B♭メジャー (変ロ長調)',
-                rightAscending: [
-                    ['B♭', 1, 1], ['C', 2, 1], ['D', 3, 1], ['E♭', 4, 1], ['F', 5, 1],
-                    ['G', 1, 2], ['A', 2, 2], ['B♭', 3, 2], ['C', 4, 2], ['D', 5, 2],
-                    ['E♭', 1, 3], ['F', 2, 3], ['G', 3, 3], ['A', 4, 3], ['B♭', 5, 3]
-                ],
-                rightDescending: [
-                    ['B♭', 5, 3], ['A', 4, 3], ['G', 3, 3], ['F', 2, 3], ['E♭', 1, 3],
-                    ['D', 5, 2], ['C', 4, 2], ['B♭', 3, 2], ['A', 2, 2], ['G', 1, 2],
-                    ['F', 5, 1], ['E♭', 4, 1], ['D', 3, 1], ['C', 2, 1], ['B♭', 1, 1]
-                ],
-                leftAscending: [
-                    ['B♭', 4, 1], ['C', 3, 1], ['D', 2, 1], ['E♭', 1, 1], ['F', 4, 1],
-                    ['G', 3, 2], ['A', 2, 2], ['B♭', 1, 2], ['C', 4, 2], ['D', 3, 2],
-                    ['E♭', 2, 2], ['F', 1, 2], ['G', 3, 3], ['A', 2, 3], ['B♭', 1, 3]
-                ],
-                leftDescending: [
-                    ['B♭', 1, 3], ['A', 2, 3], ['G', 3, 3], ['F', 1, 2], ['E♭', 2, 2],
-                    ['D', 3, 2], ['C', 4, 2], ['B♭', 1, 2], ['A', 2, 2], ['G', 3, 2],
-                    ['F', 4, 1], ['E♭', 1, 1], ['D', 2, 1], ['C', 3, 1], ['B♭', 4, 1]
-                ]
-            },
-            'E♭': {
-                name: 'E♭メジャー (変ホ長調)',
-                rightAscending: [
-                    ['E♭', 1, 1], ['F', 2, 1], ['G', 3, 1], ['A♭', 4, 1], ['B♭', 5, 1],
-                    ['C', 1, 2], ['D', 2, 2], ['E♭', 3, 2], ['F', 4, 2], ['G', 5, 2],
-                    ['A♭', 1, 3], ['B♭', 2, 3], ['C', 3, 3], ['D', 4, 3], ['E♭', 5, 3]
-                ],
-                rightDescending: [
-                    ['E♭', 5, 3], ['D', 4, 3], ['C', 3, 3], ['B♭', 2, 3], ['A♭', 1, 3],
-                    ['G', 5, 2], ['F', 4, 2], ['E♭', 3, 2], ['D', 2, 2], ['C', 1, 2],
-                    ['B♭', 5, 1], ['A♭', 4, 1], ['G', 3, 1], ['F', 2, 1], ['E♭', 1, 1]
-                ],
-                leftAscending: [
-                    ['E♭', 5, 1], ['F', 4, 1], ['G', 3, 1], ['A♭', 2, 1], ['B♭', 1, 1],
-                    ['C', 3, 2], ['D', 2, 2], ['E♭', 1, 2], ['F', 4, 2], ['G', 3, 2],
-                    ['A♭', 2, 2], ['B♭', 1, 2], ['C', 3, 3], ['D', 2, 3], ['E♭', 1, 3]
-                ],
-                leftDescending: [
-                    ['E♭', 1, 3], ['D', 2, 3], ['C', 3, 3], ['B♭', 1, 2], ['A♭', 2, 2],
-                    ['G', 3, 2], ['F', 4, 2], ['E♭', 1, 2], ['D', 2, 2], ['C', 3, 2],
-                    ['B♭', 1, 1], ['A♭', 2, 1], ['G', 3, 1], ['F', 4, 1], ['E♭', 5, 1]
-                ]
-            },
-            'A♭': {
-                name: 'A♭メジャー (変イ長調)',
-                rightAscending: [
-                    ['A♭', 1, 1], ['B♭', 2, 1], ['C', 3, 1], ['D♭', 4, 1], ['E♭', 5, 1],
-                    ['F', 1, 2], ['G', 2, 2], ['A♭', 3, 2], ['B♭', 4, 2], ['C', 5, 2],
-                    ['D♭', 1, 3], ['E♭', 2, 3], ['F', 3, 3], ['G', 4, 3], ['A♭', 5, 3]
-                ],
-                rightDescending: [
-                    ['A♭', 5, 3], ['G', 4, 3], ['F', 3, 3], ['E♭', 2, 3], ['D♭', 1, 3],
-                    ['C', 5, 2], ['B♭', 4, 2], ['A♭', 3, 2], ['G', 2, 2], ['F', 1, 2],
-                    ['E♭', 5, 1], ['D♭', 4, 1], ['C', 3, 1], ['B♭', 2, 1], ['A♭', 1, 1]
-                ],
-                leftAscending: [
-                    ['A♭', 5, 1], ['B♭', 4, 1], ['C', 3, 1], ['D♭', 2, 1], ['E♭', 1, 1],
-                    ['F', 3, 2], ['G', 2, 2], ['A♭', 1, 2], ['B♭', 4, 2], ['C', 3, 2],
-                    ['D♭', 2, 2], ['E♭', 1, 2], ['F', 3, 3], ['G', 2, 3], ['A♭', 1, 3]
-                ],
-                leftDescending: [
-                    ['A♭', 1, 3], ['G', 2, 3], ['F', 3, 3], ['E♭', 1, 2], ['D♭', 2, 2],
-                    ['C', 3, 2], ['B♭', 4, 2], ['A♭', 1, 2], ['G', 2, 2], ['F', 3, 2],
-                    ['E♭', 1, 1], ['D♭', 2, 1], ['C', 3, 1], ['B♭', 4, 1], ['A♭', 5, 1]
-                ]
-            }
-        };
+    <div class="buttons">
+      <button class="btn play" data-mode="R-asc">右手 上行</button>
+      <button class="btn play" data-mode="R-desc">右手 下行</button>
+      <button class="btn play" data-mode="L-asc">左手 上行</button>
+      <button class="btn play" data-mode="L-desc">左手 下行</button>
+      <button class="btn play" data-mode="both-asc">両手 同時（上行ユニゾン）</button>
+      <button class="btn stop" id="btnStop">停止</button>
+    </div>
 
-        // Initialize the app
-        function init() {
-            populateKeySelector();
-            // Default to C major
-            displayScale('C');
+    <div class="grid">
+      <div class="kb">
+        <div class="legend">
+          <span><span class="dot dot-R"></span>右手</span>
+          <span><span class="dot dot-L"></span>左手</span>
+          <span><span class="dot dot-B"></span>両手</span>
+          <span class="pill" id="rangeInfo">鍵盤レンジ: A0〜C8（88鍵）</span>
+          <span class="status" id="sfStatus">音色: 正弦波（デフォルト）</span>
+        </div>
+        <div id="keyboard"></div>
+      </div>
+
+      <div class="grid2">
+        <div class="block" id="info"></div>
+        <div class="block"><h3>右手 上行</h3><div class="chips" id="rhAsc"></div></div>
+        <div class="block"><h3>右手 下行</h3><div class="chips" id="rhDesc"></div></div>
+        <div class="block"><h3>左手 上行</h3><div class="chips" id="lhAsc"></div></div>
+        <div class="block"><h3>左手 下行</h3><div class="chips" id="lhDesc"></div></div>
+      </div>
+
+      <div class="warn">
+        正しい運指を外部JSONで差し替え可能。<span class="kbd">fingering.example.json</span> を参考にしてください。
+        <div class="uploader">
+          <input type="file" id="jsonFile" accept="application/json">
+          <button class="btn" id="btnLoad">JSON読み込み</button>
+        </div>
+      </div>
+      <div class="foot">※ 初回に「音色: ピアノ」に切り替えると、軽量ピアノサンプルをCDNから読み込みます。</div>
+    </div>
+  </div>
+
+  <script>
+    // ===== Sine engine (fallback) =====
+    const SineEngine = {
+      ctx:null, gain:null, master:0.25,
+      start(){ if (this.ctx) return; this.ctx=new (window.AudioContext||window.webkitAudioContext)(); this.gain=this.ctx.createGain(); this.gain.gain.value=this.master; this.gain.connect(this.ctx.destination); },
+      async play(note,oct,dur=.5){
+        if(!this.ctx) this.start();
+        const freq = midiToFreq(noteToMidi(note, oct));
+        if (!freq) return;
+        const now=this.ctx.currentTime; const o=this.ctx.createOscillator(); const g=this.ctx.createGain();
+        o.type="sine"; o.frequency.value=freq; o.connect(g); g.connect(this.gain);
+        g.gain.setValueAtTime(0,now); g.gain.linearRampToValueAtTime(1,now+.02); g.gain.exponentialRampToValueAtTime(0.0001,now+dur);
+        o.start(now); o.stop(now+dur+.02);
+      }
+    };
+
+    // ===== Tone Sampler engine =====
+    let SamplerEngine = {
+      sampler:null, loaded:false,
+      async init(){
+        if (this.loaded) return;
+        // Ensure Tone is started by a user gesture
+        await Tone.start();
+        // Lightweight mapping (Tone.js Salamander piano)
+        // Reference sample set: https://tonejs.github.io/audio/salamander/
+        this.sampler = new Tone.Sampler({
+          urls: {
+            "A0": "A0.mp3",
+            "C1": "C1.mp3",
+            "D#1": "Ds1.mp3",
+            "F#1": "Fs1.mp3",
+            "A1": "A1.mp3",
+            "C2": "C2.mp3",
+            "D#2": "Ds2.mp3",
+            "F#2": "Fs2.mp3",
+            "A2": "A2.mp3",
+            "C3": "C3.mp3",
+            "D#3": "Ds3.mp3",
+            "F#3": "Fs3.mp3",
+            "A3": "A3.mp3",
+            "C4": "C4.mp3",
+            "D#4": "Ds4.mp3",
+            "F#4": "Fs4.mp3",
+            "A4": "A4.mp3",
+            "C5": "C5.mp3",
+            "D#5": "Ds5.mp3",
+            "F#5": "Fs5.mp3",
+            "A5": "A5.mp3",
+            "C6": "C6.mp3",
+            "D#6": "Ds6.mp3",
+            "F#6": "Fs6.mp3",
+            "A6": "A6.mp3",
+            "C7": "C7.mp3",
+            "D#7": "Ds7.mp3",
+            "F#7": "Fs7.mp3",
+            "A7": "A7.mp3",
+            "C8": "C8.mp3"
+          },
+          release: 1.2,
+          baseUrl: "https://tonejs.github.io/audio/salamander/"
+        }).toDestination();
+        await this.sampler.loaded;
+        this.loaded = true;
+      },
+      async play(note,oct,dur=.8){
+        if (!this.loaded) await this.init();
+        const key = normalizeKeyStr(note, oct); // e.g., C#4
+        this.sampler.triggerAttackRelease(key, dur);
+      }
+    };
+
+    let mode = "sine"; // "sine" or "piano"
+    const sfStatus = document.getElementById('sfStatus');
+    const toggleBtn = document.getElementById('toggleMode');
+    toggleBtn.addEventListener('click', async ()=>{
+      if (mode==="sine"){
+        try{
+          sfStatus.textContent = "音色: ピアノ（読み込み中...）";
+          await SamplerEngine.init();
+          mode = "piano";
+          toggleBtn.textContent = "音色: ピアノ";
+          sfStatus.textContent = "音色: ピアノ（ロード済み）";
+        }catch(e){
+          console.error(e);
+          sfStatus.textContent = "音色: ピアノ読み込み失敗（正弦波にフォールバック）";
+          mode = "sine";
         }
+      } else {
+        mode = "sine";
+        toggleBtn.textContent = "音色: 正弦波";
+        sfStatus.textContent = "音色: 正弦波（デフォルト）";
+      }
+    });
 
-        // Populate key selector buttons
-        function populateKeySelector() {
-            const keySelector = document.getElementById('keySelector');
-            const keys = Object.keys(scaleFingerings);
+    // ===== Note utils =====
+    const NN = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
+    const enh = {"Db":"C#","Eb":"D#","Gb":"F#","Ab":"G#","Bb":"A#"};
+    function midiToNameOct(m){ const name = NN[m%12]; const oct = Math.floor(m/12) - 1; return {name, oct}; }
+    function noteToMidi(note,oct){
+      const s = note.replace("♭","b").replace("♯","#");
+      const n = (s.length===2 && s[1]==="b") ? (enh[s]||s) : s;
+      const idx = NN.indexOf(n); if (idx<0) return null;
+      return 12*(oct+1) + idx; // C4=60
+    }
+    function midiToFreq(m){ return 440 * Math.pow(2, (m-69)/12); }
+    function nameToFreq(note,oct){ const m=noteToMidi(note,oct); return m==null? null : midiToFreq(m); }
+    function normalizeKeyStr(note,oct){
+      const s = note.replace("♭","b").replace("♯","#");
+      const n = (s.length===2 && s[1]==="b") ? (enh[s]||s) : s;
+      return n + oct; // e.g., C#4
+    }
 
-            keys.forEach((key, index) => {
-                const button = document.createElement('button');
-                button.className = 'key-button' + (index === 0 ? ' active' : '');
-                button.textContent = key;
-                button.onclick = () => {
-                    document.querySelectorAll('.key-button').forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
-                    displayScale(key);
-                };
-                keySelector.appendChild(button);
-            });
+    async function playNote(note, oct, dur=0.6){
+      if (mode === "piano"){
+        try{ await SamplerEngine.play(note, oct, dur); return; }
+        catch(e){ console.warn("piano failed, fallback sine", e); }
+      }
+      await SineEngine.play(note, oct, dur);
+    }
+
+    // ===== 88-key Keyboard (A0..C8) =====
+    const keyboardDiv = document.getElementById('keyboard');
+    const W=20, H=132, HB=84, GAP=1;
+    function renderFullKeyboard(highlights=[], nowNote=null){
+      const startM = 21;  // A0
+      const endM = 108;   // C8
+      let x=0;
+      let whitePos = {};
+      let svg = `<svg viewBox="0 0 ${((W+GAP)*52)} ${H}" aria-label="keyboard">`; // 52 whites
+      for (let m=startM; m<=endM; m++){
+        const {name, oct} = midiToNameOct(m);
+        if (!name.includes("#")){
+          const keyStr = name+oct;
+          whitePos[keyStr] = x;
+          const isNow = nowNote && (normalizeKeyStr(nowNote.name, nowNote.oct)===keyStr);
+          svg += `<rect x="${x}" y="0" width="${W}" height="${H}" fill="#fff" stroke="#111" ${isNow?'stroke-width="2"':''}/>`;
+          svg += `<rect data-key="${keyStr}" x="${x}" y="0" width="${W}" height="${H}" fill="transparent"/>`;
+          x += W + GAP;
         }
-
-        // Display scale fingerings for a specific key
-        function displayScale(key) {
-            const scaleData = scaleFingerings[key];
-            const displayDiv = document.getElementById('scaleDisplay');
-
-            displayDiv.innerHTML = `
-                <div class="scale-info">
-                    <div class="info-card">
-                        <div class="info-label">調名</div>
-                        <div class="info-value">${scaleData.name}</div>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-label">音階</div>
-                        <div class="info-value">2オクターブ</div>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-label">タイプ</div>
-                        <div class="info-value">メジャースケール</div>
-                    </div>
-                </div>
-
-                <div class="hand-section">
-                    <h2 class="hand-title">
-                        <span class="hand-icon">👉</span>
-                        右手 (Right Hand)
-                        <span class="direction-indicator ascending">上行 ↑</span>
-                    </h2>
-                    <div class="notes-container">
-                        ${generateNoteBlocks(scaleData.rightAscending)}
-                    </div>
-                </div>
-
-                <div class="hand-section">
-                    <h2 class="hand-title">
-                        <span class="hand-icon">👉</span>
-                        右手 (Right Hand)
-                        <span class="direction-indicator descending">下行 ↓</span>
-                    </h2>
-                    <div class="notes-container">
-                        ${generateNoteBlocks(scaleData.rightDescending)}
-                    </div>
-                </div>
-
-                <div class="hand-section">
-                    <h2 class="hand-title">
-                        <span class="hand-icon">👈</span>
-                        左手 (Left Hand)
-                        <span class="direction-indicator ascending">上行 ↑</span>
-                    </h2>
-                    <div class="notes-container">
-                        ${generateNoteBlocks(scaleData.leftAscending)}
-                    </div>
-                </div>
-
-                <div class="hand-section">
-                    <h2 class="hand-title">
-                        <span class="hand-icon">👈</span>
-                        左手 (Left Hand)
-                        <span class="direction-indicator descending">下行 ↓</span>
-                    </h2>
-                    <div class="notes-container">
-                        ${generateNoteBlocks(scaleData.leftDescending)}
-                    </div>
-                </div>
-            `;
+      }
+      function baseHasSharp(n){ return ["C","D","F","G","A"].includes(n); }
+      for (let m=startM; m<=endM; m++){
+        const {name, oct} = midiToNameOct(m);
+        if (!name.includes("#") && baseHasSharp(name)){
+          const base = name+oct;
+          const sharp = name+"#"+oct;
+          const mSharp = m+1;
+          if (mSharp<=endM && NN[mSharp%12].includes("#")){
+            const wx = whitePos[base];
+            const isNow = nowNote && (normalizeKeyStr(nowNote.name, nowNote.oct)===sharp);
+            const bx = wx + (W*0.7);
+            svg += `<rect x="${bx}" y="0" width="${W*0.6}" height="${HB}" fill="#111" stroke="#111" ${isNow?'stroke-width="2"':''}/>`;
+            svg += `<rect data-key="${sharp}" x="${bx}" y="0" width="${W*0.6}" height="${HB}" fill="transparent"/>`;
+          }
         }
+      }
+      // highlights
+      function keyToX(keyStr){
+        if (whitePos[keyStr]!=null) return whitePos[keyStr] + W/2;
+        const base = keyStr.replace("#","");
+        const wx = whitePos[base];
+        if (wx!=null) return wx + (W*0.7) + (W*0.6)/2;
+        return null;
+      }
+      for (const h of highlights){
+        const keyStr = normalizeKeyStr(h.name, h.oct);
+        const cx = keyToX(keyStr);
+        if (cx==null) continue;
+        const color = h.hand==="B" ? "var(--B)" : (h.hand==="R" ? "var(--R)" : "var(--L)");
+        const isNow = nowNote && (normalizeKeyStr(nowNote.name, nowNote.oct)===keyStr);
+        const r = isNow ? 10 : 8;
+        const stroke = isNow ? `stroke="var(--now)" stroke-width="2"` : "";
+        svg += `<circle cx="${cx}" cy="${H-20}" r="${r}" fill="${color}" ${stroke}/>`;
+        if (h.fing){ svg += `<text x="${cx}" y="${H-22}" text-anchor="middle" font-size="10" fill="#fff" dy=".35em">${h.fing}</text>`; }
+      }
 
-        // Generate note blocks HTML
-        function generateNoteBlocks(notes) {
-            return notes.map(([note, finger, octave]) => `
-                <div class="note-block">
-                    <div class="note-name">${note}</div>
-                    <div class="finger-number">${finger}</div>
-                    <div class="octave-label">第${octave}オクターブ</div>
-                </div>
-            `).join('');
-        }
+      svg += `</svg>`;
+      keyboardDiv.innerHTML = svg;
+      // click audition
+      keyboardDiv.querySelectorAll("[data-key]").forEach(el=>{
+        el.addEventListener('click', async ()=>{
+          const k = el.getAttribute('data-key'); // e.g., C4 or C#4
+          const n = k.slice(0, -1), o = +k.slice(-1);
+          await playNote(n, o, 0.6);
+        });
+      });
+    }
 
-        // Start the app when page loads
-        window.addEventListener('DOMContentLoaded', init);
-    </script>
+    // ===== Data (C, G demo; override by JSON loader) =====
+    let data = {
+      "C": {
+        "name":"Cメジャー (ハ長調)","type":"メジャー","octaves":2,
+        "right":{"ascending":[{"note":"C","oct":4,"fing":1},{"note":"D","oct":4,"fing":2},{"note":"E","oct":4,"fing":3},{"note":"F","oct":4,"fing":1},{"note":"G","oct":4,"fing":2},{"note":"A","oct":4,"fing":3},{"note":"B","oct":4,"fing":4},{"note":"C","oct":5,"fing":5},{"note":"D","oct":5,"fing":1},{"note":"E","oct":5,"fing":2},{"note":"F","oct":5,"fing":3},{"note":"G","oct":5,"fing":1},{"note":"A","oct":5,"fing":2},{"note":"B","oct":5,"fing":3},{"note":"C","oct":6,"fing":4}],
+                 "descending":[{"note":"C","oct":6,"fing":4},{"note":"B","oct":5,"fing":3},{"note":"A","oct":5,"fing":2},{"note":"G","oct":5,"fing":1},{"note":"F","oct":5,"fing":3},{"note":"E","oct":5,"fing":2},{"note":"D","oct":5,"fing":1},{"note":"C","oct":5,"fing":5},{"note":"B","oct":4,"fing":4},{"note":"A","oct":4,"fing":3},{"note":"G","oct":4,"fing":2},{"note":"F","oct":4,"fing":1},{"note":"E","oct":4,"fing":3},{"note":"D","oct":4,"fing":2},{"note":"C","oct":4,"fing":1}]},
+        "left":{"ascending":[{"note":"C","oct":4,"fing":5},{"note":"D","oct":4,"fing":4},{"note":"E","oct":4,"fing":3},{"note":"F","oct":4,"fing":2},{"note":"G","oct":4,"fing":1},{"note":"A","oct":4,"fing":3},{"note":"B","oct":4,"fing":2},{"note":"C","oct":5,"fing":1},{"note":"D","oct":5,"fing":4},{"note":"E","oct":5,"fing":3},{"note":"F","oct":5,"fing":2},{"note":"G","oct":5,"fing":1},{"note":"A","oct":5,"fing":3},{"note":"B","oct":5,"fing":2},{"note":"C","oct":6,"fing":1}],
+                "descending":[{"note":"C","oct":6,"fing":1},{"note":"B","oct":5,"fing":2},{"note":"A","oct":5,"fing":3},{"note":"G","oct":5,"fing":1},{"note":"F","oct":5,"fing":2},{"note":"E","oct":5,"fing":3},{"note":"D","oct":5,"fing":4},{"note":"C","oct":5,"fing":1},{"note":"B","oct":4,"fing":2},{"note":"A","oct":4,"fing":3},{"note":"G","oct":4,"fing":1},{"note":"F","oct":4,"fing":2},{"note":"E","oct":4,"fing":3},{"note":"D","oct":4,"fing":4},{"note":"C","oct":4,"fing":5}]}
+      },
+      "G": {
+        "name":"Gメジャー (ト長調)","type":"メジャー","octaves":2,
+        "right":{"ascending":[{"note":"G","oct":4,"fing":1},{"note":"A","oct":4,"fing":2},{"note":"B","oct":4,"fing":3},{"note":"C","oct":5,"fing":1},{"note":"D","oct":5,"fing":2},{"note":"E","oct":5,"fing":3},{"note":"F♯","oct":5,"fing":4},{"note":"G","oct":5,"fing":5},{"note":"A","oct":5,"fing":1},{"note":"B","oct":5,"fing":2},{"note":"C","oct":6,"fing":3},{"note":"D","oct":6,"fing":1},{"note":"E","oct":6,"fing":2},{"note":"F♯","oct":6,"fing":3},{"note":"G","oct":6,"fing":4}],
+                 "descending":[{"note":"G","oct":6,"fing":4},{"note":"F♯","oct":6,"fing":3},{"note":"E","oct":6,"fing":2},{"note":"D","oct":6,"fing":1},{"note":"C","oct":6,"fing":3},{"note":"B","oct":5,"fing":2},{"note":"A","oct":5,"fing":1},{"note":"G","oct":5,"fing":5},{"note":"F♯","oct":5,"fing":4},{"note":"E","oct":5,"fing":3},{"note":"D","oct":5,"fing":2},{"note":"C","oct":5,"fing":1},{"note":"B","oct":4,"fing":3},{"note":"A","oct":4,"fing":2},{"note":"G","oct":4,"fing":1}]},
+        "left":{"ascending":[{"note":"G","oct":3,"fing":5},{"note":"A","oct":3,"fing":4},{"note":"B","oct":3,"fing":3},{"note":"C","oct":4,"fing":2},{"note":"D","oct":4,"fing":1},{"note":"E","oct":4,"fing":3},{"note":"F♯","oct":4,"fing":2},{"note":"G","oct":4,"fing":1},{"note":"A","oct":4,"fing":4},{"note":"B","oct":4,"fing":3},{"note":"C","oct":5,"fing":2},{"note":"D","oct":5,"fing":1},{"note":"E","oct":5,"fing":3},{"note":"F♯","oct":5,"fing":2},{"note":"G","oct":5,"fing":1}],
+                "descending":[{"note":"G","oct":5,"fing":1},{"note":"F♯","oct":5,"fing":2},{"note":"E","oct":5,"fing":3},{"note":"D","oct":5,"fing":1},{"note":"C","oct":5,"fing":2},{"note":"B","oct":4,"fing":3},{"note":"A","oct":4,"fing":4},{"note":"G","oct":4,"fing":1},{"note":"F♯","oct":4,"fing":2},{"note":"E","oct":4,"fing":3},{"note":"D","oct":4,"fing":4},{"note":"C","oct":4,"fing":2},{"note":"B","oct":3,"fing":3},{"note":"A","oct":3,"fing":4},{"note":"G","oct":3,"fing":5}]}
+      }
+    };
+
+    // ===== UI state =====
+    let currentKey = "C";
+    let playing = false;
+    let playTimer = null;
+    const tempo = document.getElementById('tempo');
+    const tempoValEl = document.getElementById('tempoVal');
+    tempo.addEventListener('input', ()=> tempoValEl.textContent = tempo.value);
+    tempoValEl.textContent = tempo.value;
+
+    const keyButtons = document.getElementById('keyButtons');
+    function renderKeyButtons(){
+      keyButtons.innerHTML = "";
+      Object.keys(data).forEach(k=>{
+        const btn = document.createElement('button');
+        btn.className = 'key'+(k===currentKey?' active':'');
+        btn.textContent = k;
+        btn.onclick = ()=>{ currentKey=k; document.querySelectorAll('.key').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); renderAll(); };
+        keyButtons.appendChild(btn);
+      });
+    }
+
+    function chips(elId, seq){
+      const el = document.getElementById(elId);
+      el.innerHTML = "";
+      (seq||[]).forEach(n=>{
+        const d=document.createElement('div'); d.className='chip';
+        d.textContent = `${n.note} ${n.oct} / 指${n.fing}`; el.appendChild(d);
+      });
+    }
+
+    function renderAll(){
+      renderKeyButtons();
+      const k = data[currentKey];
+      const info = document.getElementById('info');
+      info.innerHTML = `<h3>情報</h3><div class="chips">
+        <div class="chip">調名: ${k.name||currentKey}</div>
+        <div class="chip">タイプ: ${k.type||"メジャー"}</div>
+        <div class="chip">オクターブ: ${k.octaves||2}</div>
+      </div>`;
+      chips('rhAsc', k.right?.ascending); chips('rhDesc', k.right?.descending);
+      chips('lhAsc', k.left?.ascending); chips('lhDesc', k.left?.descending);
+
+      const hi = [];
+      (k.right?.ascending||[]).forEach(n=>hi.push({name:n.note,oct:n.oct,hand:"R",fing:n.fing}));
+      (k.left?.ascending||[]).forEach(n=>hi.push({name:n.note,oct:n.oct,hand:"L",fing:n.fing}));
+      renderFullKeyboard(hi, null);
+    }
+
+    function stop(){ playing=false; if (playTimer){ clearTimeout(playTimer); playTimer=null; } renderAll(); }
+    document.getElementById('btnStop').onclick = stop;
+
+    async function playSeq(seq, hand){
+      if (!seq || !seq.length) return;
+      const seq2 = seq.concat([seq[seq.length-1]]);
+      playing = true; let i=0; const ms = 60000 / (+tempo.value);
+      const step = async ()=>{
+        if (!playing){ stop(); return; }
+        if (i>=seq2.length){ stop(); return; }
+        const n = seq2[i++];
+        await playNote(n.note, n.oct, 0.8);
+        const hi = seq2.map(x=>({name:x.note,oct:x.oct,hand:hand,fing:x.fing}));
+        renderFullKeyboard(hi, {name:n.note,oct:n.oct});
+        playTimer = setTimeout(step, ms);
+      }; step();
+    }
+
+    async function playBothAsc(k){
+      const R0 = k.right?.ascending || [], L0 = k.left?.ascending || [];
+      const R = R0.length? R0.concat([R0[R0.length-1]]) : R0;
+      const L = L0.length? L0.concat([L0[L0.length-1]]) : L0;
+      const len = Math.max(R.length, L.length);
+      const ms = 60000 / (+tempo.value);
+      playing = true; let i=0;
+      const step = async ()=>{
+        if (!playing){ stop(); return; }
+        if (i>=len){ stop(); return; }
+        const r = R[i] || null, l = L[i] || null;
+        const hi = [];
+        if (r){ await playNote(r.note, r.oct, 0.8); hi.push({name:r.note,oct:r.oct,hand:"R",fing:r.fing}); }
+        if (l){ await playNote(l.note, l.oct, 0.8); hi.push({name:l.note,oct:l.oct,hand:"L",fing:l.fing}); }
+        renderFullKeyboard(hi, hi[0]||hi[1]||null);
+        i++; playTimer = setTimeout(step, ms);
+      }; step();
+    }
+
+    document.querySelectorAll('.btn.play').forEach(b=>{
+      b.addEventListener('click', async ()=>{
+        const k = data[currentKey];
+        stop();
+        const modeAttr = b.getAttribute('data-mode');
+        if (modeAttr==="R-asc") await playSeq(k.right?.ascending, "R");
+        if (modeAttr==="R-desc") await playSeq(k.right?.descending, "R");
+        if (modeAttr==="L-asc") await playSeq(k.left?.ascending, "L");
+        if (modeAttr==="L-desc") await playSeq(k.left?.descending, "L");
+        if (modeAttr==="both-asc") await playBothAsc(k);
+      });
+    });
+
+    document.getElementById('btnLoad').addEventListener('click', async ()=>{
+      const f = document.getElementById('jsonFile').files?.[0];
+      if(!f){ alert("JSONファイルを選択してください"); return; }
+      try{
+        const t = await f.text(); const obj = JSON.parse(t);
+        data = obj; currentKey = Object.keys(data)[0] || "C"; stop(); renderAll();
+      }catch(e){ alert("JSON読み込みエラー: "+e.message); }
+    });
+
+    // Init
+    renderAll();
+  </script>
 </body>
 </html>
