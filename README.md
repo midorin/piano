@@ -5,7 +5,7 @@
 88鍵フル鍵盤に対応し、右手・左手・両手ユニゾンの再生が可能。
 
 ## 🌐 デモ
-👉 **[GitHub Pages で開く](https://<midorin.github.io/piano/)**  
+👉 **[GitHub Pages で開く](https://midorin.github.io/piano/)**  
 （ページ上部の「音色: 正弦波」をクリックしてから「音色: ピアノ」に切り替えると、リアルピアノ音が再生されます）
 
 
