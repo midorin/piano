@@ -1,0 +1,636 @@
+{
+  "C": {
+    "name": "Cメジャー (ハ長調)",
+    "type": "メジャー",
+    "octaves": 2,
+    "right": {
+      "ascending": [
+        {
+          "note": "C",
+          "oct": 4,
+          "fing": 1
+        },
+        {
+          "note": "D",
+          "oct": 4,
+          "fing": 2
+        },
+        {
+          "note": "E",
+          "oct": 4,
+          "fing": 3
+        },
+        {
+          "note": "F",
+          "oct": 4,
+          "fing": 1
+        },
+        {
+          "note": "G",
+          "oct": 4,
+          "fing": 2
+        },
+        {
+          "note": "A",
+          "oct": 4,
+          "fing": 3
+        },
+        {
+          "note": "B",
+          "oct": 4,
+          "fing": 4
+        },
+        {
+          "note": "C",
+          "oct": 5,
+          "fing": 5
+        },
+        {
+          "note": "D",
+          "oct": 5,
+          "fing": 1
+        },
+        {
+          "note": "E",
+          "oct": 5,
+          "fing": 2
+        },
+        {
+          "note": "F",
+          "oct": 5,
+          "fing": 3
+        },
+        {
+          "note": "G",
+          "oct": 5,
+          "fing": 1
+        },
+        {
+          "note": "A",
+          "oct": 5,
+          "fing": 2
+        },
+        {
+          "note": "B",
+          "oct": 5,
+          "fing": 3
+        },
+        {
+          "note": "C",
+          "oct": 6,
+          "fing": 4
+        }
+      ],
+      "descending": [
+        {
+          "note": "C",
+          "oct": 6,
+          "fing": 4
+        },
+        {
+          "note": "B",
+          "oct": 5,
+          "fing": 3
+        },
+        {
+          "note": "A",
+          "oct": 5,
+          "fing": 2
+        },
+        {
+          "note": "G",
+          "oct": 5,
+          "fing": 1
+        },
+        {
+          "note": "F",
+          "oct": 5,
+          "fing": 3
+        },
+        {
+          "note": "E",
+          "oct": 5,
+          "fing": 2
+        },
+        {
+          "note": "D",
+          "oct": 5,
+          "fing": 1
+        },
+        {
+          "note": "C",
+          "oct": 5,
+          "fing": 5
+        },
+        {
+          "note": "B",
+          "oct": 4,
+          "fing": 4
+        },
+        {
+          "note": "A",
+          "oct": 4,
+          "fing": 3
+        },
+        {
+          "note": "G",
+          "oct": 4,
+          "fing": 2
+        },
+        {
+          "note": "F",
+          "oct": 4,
+          "fing": 1
+        },
+        {
+          "note": "E",
+          "oct": 4,
+          "fing": 3
+        },
+        {
+          "note": "D",
+          "oct": 4,
+          "fing": 2
+        },
+        {
+          "note": "C",
+          "oct": 4,
+          "fing": 1
+        }
+      ]
+    },
+    "left": {
+      "ascending": [
+        {
+          "note": "C",
+          "oct": 4,
+          "fing": 5
+        },
+        {
+          "note": "D",
+          "oct": 4,
+          "fing": 4
+        },
+        {
+          "note": "E",
+          "oct": 4,
+          "fing": 3
+        },
+        {
+          "note": "F",
+          "oct": 4,
+          "fing": 2
+        },
+        {
+          "note": "G",
+          "oct": 4,
+          "fing": 1
+        },
+        {
+          "note": "A",
+          "oct": 4,
+          "fing": 3
+        },
+        {
+          "note": "B",
+          "oct": 4,
+          "fing": 2
+        },
+        {
+          "note": "C",
+          "oct": 5,
+          "fing": 1
+        },
+        {
+          "note": "D",
+          "oct": 5,
+          "fing": 4
+        },
+        {
+          "note": "E",
+          "oct": 5,
+          "fing": 3
+        },
+        {
+          "note": "F",
+          "oct": 5,
+          "fing": 2
+        },
+        {
+          "note": "G",
+          "oct": 5,
+          "fing": 1
+        },
+        {
+          "note": "A",
+          "oct": 5,
+          "fing": 3
+        },
+        {
+          "note": "B",
+          "oct": 5,
+          "fing": 2
+        },
+        {
+          "note": "C",
+          "oct": 6,
+          "fing": 1
+        }
+      ],
+      "descending": [
+        {
+          "note": "C",
+          "oct": 6,
+          "fing": 1
+        },
+        {
+          "note": "B",
+          "oct": 5,
+          "fing": 2
+        },
+        {
+          "note": "A",
+          "oct": 5,
+          "fing": 3
+        },
+        {
+          "note": "G",
+          "oct": 5,
+          "fing": 1
+        },
+        {
+          "note": "F",
+          "oct": 5,
+          "fing": 2
+        },
+        {
+          "note": "E",
+          "oct": 5,
+          "fing": 3
+        },
+        {
+          "note": "D",
+          "oct": 5,
+          "fing": 4
+        },
+        {
+          "note": "C",
+          "oct": 5,
+          "fing": 1
+        },
+        {
+          "note": "B",
+          "oct": 4,
+          "fing": 2
+        },
+        {
+          "note": "A",
+          "oct": 4,
+          "fing": 3
+        },
+        {
+          "note": "G",
+          "oct": 4,
+          "fing": 1
+        },
+        {
+          "note": "F",
+          "oct": 4,
+          "fing": 2
+        },
+        {
+          "note": "E",
+          "oct": 4,
+          "fing": 3
+        },
+        {
+          "note": "D",
+          "oct": 4,
+          "fing": 4
+        },
+        {
+          "note": "C",
+          "oct": 4,
+          "fing": 5
+        }
+      ]
+    }
+  },
+  "G": {
+    "name": "Gメジャー (ト長調)",
+    "type": "メジャー",
+    "octaves": 2,
+    "right": {
+      "ascending": [
+        {
+          "note": "G",
+          "oct": 4,
+          "fing": 1
+        },
+        {
+          "note": "A",
+          "oct": 4,
+          "fing": 2
+        },
+        {
+          "note": "B",
+          "oct": 4,
+          "fing": 3
+        },
+        {
+          "note": "C",
+          "oct": 5,
+          "fing": 1
+        },
+        {
+          "note": "D",
+          "oct": 5,
+          "fing": 2
+        },
+        {
+          "note": "E",
+          "oct": 5,
+          "fing": 3
+        },
+        {
+          "note": "F♯",
+          "oct": 5,
+          "fing": 4
+        },
+        {
+          "note": "G",
+          "oct": 5,
+          "fing": 5
+        },
+        {
+          "note": "A",
+          "oct": 5,
+          "fing": 1
+        },
+        {
+          "note": "B",
+          "oct": 5,
+          "fing": 2
+        },
+        {
+          "note": "C",
+          "oct": 6,
+          "fing": 3
+        },
+        {
+          "note": "D",
+          "oct": 6,
+          "fing": 1
+        },
+        {
+          "note": "E",
+          "oct": 6,
+          "fing": 2
+        },
+        {
+          "note": "F♯",
+          "oct": 6,
+          "fing": 3
+        },
+        {
+          "note": "G",
+          "oct": 6,
+          "fing": 4
+        }
+      ],
+      "descending": [
+        {
+          "note": "G",
+          "oct": 6,
+          "fing": 4
+        },
+        {
+          "note": "F♯",
+          "oct": 6,
+          "fing": 3
+        },
+        {
+          "note": "E",
+          "oct": 6,
+          "fing": 2
+        },
+        {
+          "note": "D",
+          "oct": 6,
+          "fing": 1
+        },
+        {
+          "note": "C",
+          "oct": 6,
+          "fing": 3
+        },
+        {
+          "note": "B",
+          "oct": 5,
+          "fing": 2
+        },
+        {
+          "note": "A",
+          "oct": 5,
+          "fing": 1
+        },
+        {
+          "note": "G",
+          "oct": 5,
+          "fing": 5
+        },
+        {
+          "note": "F♯",
+          "oct": 5,
+          "fing": 4
+        },
+        {
+          "note": "E",
+          "oct": 5,
+          "fing": 3
+        },
+        {
+          "note": "D",
+          "oct": 5,
+          "fing": 2
+        },
+        {
+          "note": "C",
+          "oct": 5,
+          "fing": 1
+        },
+        {
+          "note": "B",
+          "oct": 4,
+          "fing": 3
+        },
+        {
+          "note": "A",
+          "oct": 4,
+          "fing": 2
+        },
+        {
+          "note": "G",
+          "oct": 4,
+          "fing": 1
+        }
+      ]
+    },
+    "left": {
+      "ascending": [
+        {
+          "note": "G",
+          "oct": 3,
+          "fing": 5
+        },
+        {
+          "note": "A",
+          "oct": 3,
+          "fing": 4
+        },
+        {
+          "note": "B",
+          "oct": 3,
+          "fing": 3
+        },
+        {
+          "note": "C",
+          "oct": 4,
+          "fing": 2
+        },
+        {
+          "note": "D",
+          "oct": 4,
+          "fing": 1
+        },
+        {
+          "note": "E",
+          "oct": 4,
+          "fing": 3
+        },
+        {
+          "note": "F♯",
+          "oct": 4,
+          "fing": 2
+        },
+        {
+          "note": "G",
+          "oct": 4,
+          "fing": 1
+        },
+        {
+          "note": "A",
+          "oct": 4,
+          "fing": 4
+        },
+        {
+          "note": "B",
+          "oct": 4,
+          "fing": 3
+        },
+        {
+          "note": "C",
+          "oct": 5,
+          "fing": 2
+        },
+        {
+          "note": "D",
+          "oct": 5,
+          "fing": 1
+        },
+        {
+          "note": "E",
+          "oct": 5,
+          "fing": 3
+        },
+        {
+          "note": "F♯",
+          "oct": 5,
+          "fing": 2
+        },
+        {
+          "note": "G",
+          "oct": 5,
+          "fing": 1
+        }
+      ],
+      "descending": [
+        {
+          "note": "G",
+          "oct": 5,
+          "fing": 1
+        },
+        {
+          "note": "F♯",
+          "oct": 5,
+          "fing": 2
+        },
+        {
+          "note": "E",
+          "oct": 5,
+          "fing": 3
+        },
+        {
+          "note": "D",
+          "oct": 5,
+          "fing": 1
+        },
+        {
+          "note": "C",
+          "oct": 5,
+          "fing": 2
+        },
+        {
+          "note": "B",
+          "oct": 4,
+          "fing": 3
+        },
+        {
+          "note": "A",
+          "oct": 4,
+          "fing": 4
+        },
+        {
+          "note": "G",
+          "oct": 4,
+          "fing": 1
+        },
+        {
+          "note": "F♯",
+          "oct": 4,
+          "fing": 2
+        },
+        {
+          "note": "E",
+          "oct": 4,
+          "fing": 3
+        },
+        {
+          "note": "D",
+          "oct": 4,
+          "fing": 4
+        },
+        {
+          "note": "C",
+          "oct": 4,
+          "fing": 2
+        },
+        {
+          "note": "B",
+          "oct": 3,
+          "fing": 3
+        },
+        {
+          "note": "A",
+          "oct": 3,
+          "fing": 4
+        },
+        {
+          "note": "G",
+          "oct": 3,
+          "fing": 5
+        }
+      ]
+    }
+  }
+}
