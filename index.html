@@ -1,48 +1,263 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ピアノスケール v7（Tone.jsピアノ）</title>
   <style>
-    :root{--bg1:#667eea;--bg2:#764ba2;--ink:#1f2937;--muted:#6b7280;--brand:#6366f1;--white:#fff;--border:#e5e7eb;--R:#10b981;--L:#ef4444;--B:#8b5cf6;--now:#111827}
-    *{box-sizing:border-box}
-    body{margin:0;min-height:100vh;background:linear-gradient(135deg,var(--bg1),var(--bg2));font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto;color:var(--ink);padding:24px}
-    .card{max-width:1200px;margin:0 auto;background:var(--white);border-radius:16px;padding:22px;box-shadow:0 18px 50px rgba(0,0,0,.25)}
-    h1{margin:0 0 6px;font-size:clamp(22px,3.5vw,32px)}
-    .sub{color:var(--muted);margin-bottom:10px}
-    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    .keys{display:flex;gap:8px;flex-wrap:wrap}
-    .key{padding:9px 14px;border:2px solid var(--brand);border-radius:10px;background:#fff;color:var(--brand);font-weight:700;cursor:pointer}
-    .key.active,.key:hover{background:var(--brand);color:#fff}
-    .controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-left:auto}
-    .pill{padding:6px 10px;border-radius:999px;background:#f3f4f6;color:#374151;font-size:14px}
-    input[type="range"]{accent-color:var(--brand)}
-    .buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
-    .btn{padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:#fff;cursor:pointer}
-    .play{background:#16a34a;border-color:#15803d;color:#fff}
-    .stop{background:#ef4444;border-color:#b91c1c;color:#fff}
-    .mode{background:#0ea5e9;border-color:#0284c7;color:#fff}
-    .grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:14px}
-    .kb{background:#f9fafb;border:1px solid var(--border);border-radius:12px;padding:12px}
-    .legend{display:flex;gap:12px;flex-wrap:wrap;color:#374151;font-size:14px;margin-bottom:6px;align-items:center}
-    .dot{width:12px;height:12px;border-radius:50%;display:inline-block;margin-right:6px;vertical-align:middle}
-    .dot-R{background:var(--R)} .dot-L{background:var(--L)} .dot-B{background:var(--B)}
-    svg{width:100%;height:auto;display:block}
-    .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
-    .block{border-left:4px solid var(--brand);border:1px solid var(--border);border-radius:10px;padding:10px;background:#fff}
-    .block h3{margin:0 0 8px;font-size:16px;display:flex;gap:8px;align-items:center}
-    .chips{display:flex;gap:6px;flex-wrap:wrap}
-    .chip{border:1px solid var(--border);padding:6px 8px;border-radius:8px;background:#fff}
-    .warn{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;padding:10px;border-radius:8px}
-    .uploader{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-    .kbd{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#111;color:#fff;padding:1px 6px;border-radius:6px}
-    .foot{font-size:12px;color:#6b7280}
-    .status{font-size:12px;color:#6b7280;margin-left:auto}
+    :root {
+      --bg1: #667eea;
+      --bg2: #764ba2;
+      --ink: #1f2937;
+      --muted: #6b7280;
+      --brand: #6366f1;
+      --white: #fff;
+      --border: #e5e7eb;
+      --R: #10b981;
+      --L: #ef4444;
+      --B: #8b5cf6;
+      --now: #111827
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--bg1), var(--bg2));
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto;
+      color: var(--ink);
+      padding: 24px
+    }
+
+    .card {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: var(--white);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, .25)
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: clamp(22px, 3.5vw, 32px)
+    }
+
+    .sub {
+      color: var(--muted);
+      margin-bottom: 10px
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center
+    }
+
+    .keys {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap
+    }
+
+    .key {
+      padding: 9px 14px;
+      border: 2px solid var(--brand);
+      border-radius: 10px;
+      background: #fff;
+      color: var(--brand);
+      font-weight: 700;
+      cursor: pointer
+    }
+
+    .key.active,
+    .key:hover {
+      background: var(--brand);
+      color: #fff
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-left: auto
+    }
+
+    .pill {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      color: #374151;
+      font-size: 14px
+    }
+
+    input[type="range"] {
+      accent-color: var(--brand)
+    }
+
+    .buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 6px
+    }
+
+    .btn {
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #fff;
+      cursor: pointer
+    }
+
+    .play {
+      background: #16a34a;
+      border-color: #15803d;
+      color: #fff
+    }
+
+    .stop {
+      background: #ef4444;
+      border-color: #b91c1c;
+      color: #fff
+    }
+
+    .mode {
+      background: #0ea5e9;
+      border-color: #0284c7;
+      color: #fff
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 14px
+    }
+
+    .kb {
+      background: #f9fafb;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px
+    }
+
+    .legend {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      color: #374151;
+      font-size: 14px;
+      margin-bottom: 6px;
+      align-items: center
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 6px;
+      vertical-align: middle
+    }
+
+    .dot-R {
+      background: var(--R)
+    }
+
+    .dot-L {
+      background: var(--L)
+    }
+
+    .dot-B {
+      background: var(--B)
+    }
+
+    svg {
+      width: 100%;
+      height: auto;
+      display: block
+    }
+
+    .grid2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px
+    }
+
+    .block {
+      border-left: 4px solid var(--brand);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      background: #fff
+    }
+
+    .block h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+      display: flex;
+      gap: 8px;
+      align-items: center
+    }
+
+    .chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap
+    }
+
+    .chip {
+      border: 1px solid var(--border);
+      padding: 6px 8px;
+      border-radius: 8px;
+      background: #fff
+    }
+
+    .warn {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      color: #9a3412;
+      padding: 10px;
+      border-radius: 8px
+    }
+
+    .uploader {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap
+    }
+
+    .kbd {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      background: #111;
+      color: #fff;
+      padding: 1px 6px;
+      border-radius: 6px
+    }
+
+    .foot {
+      font-size: 12px;
+      color: #6b7280
+    }
+
+    .status {
+      font-size: 12px;
+      color: #6b7280;
+      margin-left: auto
+    }
   </style>
   <!-- Tone.js (CDN) -->
   <script src="https://cdn.jsdelivr.net/npm/tone/build/Tone.js"></script>
 </head>
+
 <body>
   <div class="card">
     <h1>🎹 ピアノスケール v7</h1>
@@ -80,10 +295,22 @@
 
       <div class="grid2">
         <div class="block" id="info"></div>
-        <div class="block"><h3>右手 上行</h3><div class="chips" id="rhAsc"></div></div>
-        <div class="block"><h3>右手 下行</h3><div class="chips" id="rhDesc"></div></div>
-        <div class="block"><h3>左手 上行</h3><div class="chips" id="lhAsc"></div></div>
-        <div class="block"><h3>左手 下行</h3><div class="chips" id="lhDesc"></div></div>
+        <div class="block">
+          <h3>右手 上行</h3>
+          <div class="chips" id="rhAsc"></div>
+        </div>
+        <div class="block">
+          <h3>右手 下行</h3>
+          <div class="chips" id="rhDesc"></div>
+        </div>
+        <div class="block">
+          <h3>左手 上行</h3>
+          <div class="chips" id="lhAsc"></div>
+        </div>
+        <div class="block">
+          <h3>左手 下行</h3>
+          <div class="chips" id="lhDesc"></div>
+        </div>
       </div>
 
       <div class="warn">
@@ -100,23 +327,23 @@
   <script>
     // ===== Sine engine (fallback) =====
     const SineEngine = {
-      ctx:null, gain:null, master:0.25,
-      start(){ if (this.ctx) return; this.ctx=new (window.AudioContext||window.webkitAudioContext)(); this.gain=this.ctx.createGain(); this.gain.gain.value=this.master; this.gain.connect(this.ctx.destination); },
-      async play(note,oct,dur=.5){
-        if(!this.ctx) this.start();
+      ctx: null, gain: null, master: 0.25,
+      start() { if (this.ctx) return; this.ctx = new (window.AudioContext || window.webkitAudioContext)(); this.gain = this.ctx.createGain(); this.gain.gain.value = this.master; this.gain.connect(this.ctx.destination); },
+      async play(note, oct, dur = .5) {
+        if (!this.ctx) this.start();
         const freq = midiToFreq(noteToMidi(note, oct));
         if (!freq) return;
-        const now=this.ctx.currentTime; const o=this.ctx.createOscillator(); const g=this.ctx.createGain();
-        o.type="sine"; o.frequency.value=freq; o.connect(g); g.connect(this.gain);
-        g.gain.setValueAtTime(0,now); g.gain.linearRampToValueAtTime(1,now+.02); g.gain.exponentialRampToValueAtTime(0.0001,now+dur);
-        o.start(now); o.stop(now+dur+.02);
+        const now = this.ctx.currentTime; const o = this.ctx.createOscillator(); const g = this.ctx.createGain();
+        o.type = "sine"; o.frequency.value = freq; o.connect(g); g.connect(this.gain);
+        g.gain.setValueAtTime(0, now); g.gain.linearRampToValueAtTime(1, now + .02); g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+        o.start(now); o.stop(now + dur + .02);
       }
     };
 
     // ===== Tone Sampler engine =====
     let SamplerEngine = {
-      sampler:null, loaded:false,
-      async init(){
+      sampler: null, loaded: false,
+      async init() {
         if (this.loaded) return;
         // Ensure Tone is started by a user gesture
         await Tone.start();
@@ -161,7 +388,7 @@
         await this.sampler.loaded;
         this.loaded = true;
       },
-      async play(note,oct,dur=.8){
+      async play(note, oct, dur = .8) {
         if (!this.loaded) await this.init();
         const key = normalizeKeyStr(note, oct); // e.g., C#4
         this.sampler.triggerAttackRelease(key, dur);
@@ -171,15 +398,15 @@
     let mode = "sine"; // "sine" or "piano"
     const sfStatus = document.getElementById('sfStatus');
     const toggleBtn = document.getElementById('toggleMode');
-    toggleBtn.addEventListener('click', async ()=>{
-      if (mode==="sine"){
-        try{
+    toggleBtn.addEventListener('click', async () => {
+      if (mode === "sine") {
+        try {
           sfStatus.textContent = "音色: ピアノ（読み込み中...）";
           await SamplerEngine.init();
           mode = "piano";
           toggleBtn.textContent = "音色: ピアノ";
           sfStatus.textContent = "音色: ピアノ（ロード済み）";
-        }catch(e){
+        } catch (e) {
           console.error(e);
           sfStatus.textContent = "音色: ピアノ読み込み失敗（正弦波にフォールバック）";
           mode = "sine";
@@ -192,92 +419,92 @@
     });
 
     // ===== Note utils =====
-    const NN = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
-    const enh = {"Db":"C#","Eb":"D#","Gb":"F#","Ab":"G#","Bb":"A#"};
-    function midiToNameOct(m){ const name = NN[m%12]; const oct = Math.floor(m/12) - 1; return {name, oct}; }
-    function noteToMidi(note,oct){
-      const s = note.replace("♭","b").replace("♯","#");
-      const n = (s.length===2 && s[1]==="b") ? (enh[s]||s) : s;
-      const idx = NN.indexOf(n); if (idx<0) return null;
-      return 12*(oct+1) + idx; // C4=60
+    const NN = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+    const enh = { "Db": "C#", "Eb": "D#", "Gb": "F#", "Ab": "G#", "Bb": "A#" };
+    function midiToNameOct(m) { const name = NN[m % 12]; const oct = Math.floor(m / 12) - 1; return { name, oct }; }
+    function noteToMidi(note, oct) {
+      const s = note.replace("♭", "b").replace("♯", "#");
+      const n = (s.length === 2 && s[1] === "b") ? (enh[s] || s) : s;
+      const idx = NN.indexOf(n); if (idx < 0) return null;
+      return 12 * (oct + 1) + idx; // C4=60
     }
-    function midiToFreq(m){ return 440 * Math.pow(2, (m-69)/12); }
-    function nameToFreq(note,oct){ const m=noteToMidi(note,oct); return m==null? null : midiToFreq(m); }
-    function normalizeKeyStr(note,oct){
-      const s = note.replace("♭","b").replace("♯","#");
-      const n = (s.length===2 && s[1]==="b") ? (enh[s]||s) : s;
+    function midiToFreq(m) { return 440 * Math.pow(2, (m - 69) / 12); }
+    function nameToFreq(note, oct) { const m = noteToMidi(note, oct); return m == null ? null : midiToFreq(m); }
+    function normalizeKeyStr(note, oct) {
+      const s = note.replace("♭", "b").replace("♯", "#");
+      const n = (s.length === 2 && s[1] === "b") ? (enh[s] || s) : s;
       return n + oct; // e.g., C#4
     }
 
-    async function playNote(note, oct, dur=0.6){
-      if (mode === "piano"){
-        try{ await SamplerEngine.play(note, oct, dur); return; }
-        catch(e){ console.warn("piano failed, fallback sine", e); }
+    async function playNote(note, oct, dur = 0.6) {
+      if (mode === "piano") {
+        try { await SamplerEngine.play(note, oct, dur); return; }
+        catch (e) { console.warn("piano failed, fallback sine", e); }
       }
       await SineEngine.play(note, oct, dur);
     }
 
     // ===== 88-key Keyboard (A0..C8) =====
     const keyboardDiv = document.getElementById('keyboard');
-    const W=20, H=132, HB=84, GAP=1;
-    function renderFullKeyboard(highlights=[], nowNote=null){
+    const W = 20, H = 132, HB = 84, GAP = 1;
+    function renderFullKeyboard(highlights = [], nowNote = null) {
       const startM = 21;  // A0
       const endM = 108;   // C8
-      let x=0;
+      let x = 0;
       let whitePos = {};
-      let svg = `<svg viewBox="0 0 ${((W+GAP)*52)} ${H}" aria-label="keyboard">`; // 52 whites
-      for (let m=startM; m<=endM; m++){
-        const {name, oct} = midiToNameOct(m);
-        if (!name.includes("#")){
-          const keyStr = name+oct;
+      let svg = `<svg viewBox="0 0 ${((W + GAP) * 52)} ${H}" aria-label="keyboard">`; // 52 whites
+      for (let m = startM; m <= endM; m++) {
+        const { name, oct } = midiToNameOct(m);
+        if (!name.includes("#")) {
+          const keyStr = name + oct;
           whitePos[keyStr] = x;
-          const isNow = nowNote && (normalizeKeyStr(nowNote.name, nowNote.oct)===keyStr);
-          svg += `<rect x="${x}" y="0" width="${W}" height="${H}" fill="#fff" stroke="#111" ${isNow?'stroke-width="2"':''}/>`;
+          const isNow = nowNote && (normalizeKeyStr(nowNote.name, nowNote.oct) === keyStr);
+          svg += `<rect x="${x}" y="0" width="${W}" height="${H}" fill="#fff" stroke="#111" ${isNow ? 'stroke-width="2"' : ''}/>`;
           svg += `<rect data-key="${keyStr}" x="${x}" y="0" width="${W}" height="${H}" fill="transparent"/>`;
           x += W + GAP;
         }
       }
-      function baseHasSharp(n){ return ["C","D","F","G","A"].includes(n); }
-      for (let m=startM; m<=endM; m++){
-        const {name, oct} = midiToNameOct(m);
-        if (!name.includes("#") && baseHasSharp(name)){
-          const base = name+oct;
-          const sharp = name+"#"+oct;
-          const mSharp = m+1;
-          if (mSharp<=endM && NN[mSharp%12].includes("#")){
+      function baseHasSharp(n) { return ["C", "D", "F", "G", "A"].includes(n); }
+      for (let m = startM; m <= endM; m++) {
+        const { name, oct } = midiToNameOct(m);
+        if (!name.includes("#") && baseHasSharp(name)) {
+          const base = name + oct;
+          const sharp = name + "#" + oct;
+          const mSharp = m + 1;
+          if (mSharp <= endM && NN[mSharp % 12].includes("#")) {
             const wx = whitePos[base];
-            const isNow = nowNote && (normalizeKeyStr(nowNote.name, nowNote.oct)===sharp);
-            const bx = wx + (W*0.7);
-            svg += `<rect x="${bx}" y="0" width="${W*0.6}" height="${HB}" fill="#111" stroke="#111" ${isNow?'stroke-width="2"':''}/>`;
-            svg += `<rect data-key="${sharp}" x="${bx}" y="0" width="${W*0.6}" height="${HB}" fill="transparent"/>`;
+            const isNow = nowNote && (normalizeKeyStr(nowNote.name, nowNote.oct) === sharp);
+            const bx = wx + (W * 0.7);
+            svg += `<rect x="${bx}" y="0" width="${W * 0.6}" height="${HB}" fill="#111" stroke="#111" ${isNow ? 'stroke-width="2"' : ''}/>`;
+            svg += `<rect data-key="${sharp}" x="${bx}" y="0" width="${W * 0.6}" height="${HB}" fill="transparent"/>`;
           }
         }
       }
       // highlights
-      function keyToX(keyStr){
-        if (whitePos[keyStr]!=null) return whitePos[keyStr] + W/2;
-        const base = keyStr.replace("#","");
+      function keyToX(keyStr) {
+        if (whitePos[keyStr] != null) return whitePos[keyStr] + W / 2;
+        const base = keyStr.replace("#", "");
         const wx = whitePos[base];
-        if (wx!=null) return wx + (W*0.7) + (W*0.6)/2;
+        if (wx != null) return wx + (W * 0.7) + (W * 0.6) / 2;
         return null;
       }
-      for (const h of highlights){
+      for (const h of highlights) {
         const keyStr = normalizeKeyStr(h.name, h.oct);
         const cx = keyToX(keyStr);
-        if (cx==null) continue;
-        const color = h.hand==="B" ? "var(--B)" : (h.hand==="R" ? "var(--R)" : "var(--L)");
-        const isNow = nowNote && (normalizeKeyStr(nowNote.name, nowNote.oct)===keyStr);
+        if (cx == null) continue;
+        const color = h.hand === "B" ? "var(--B)" : (h.hand === "R" ? "var(--R)" : "var(--L)");
+        const isNow = nowNote && (normalizeKeyStr(nowNote.name, nowNote.oct) === keyStr);
         const r = isNow ? 10 : 8;
         const stroke = isNow ? `stroke="var(--now)" stroke-width="2"` : "";
-        svg += `<circle cx="${cx}" cy="${H-20}" r="${r}" fill="${color}" ${stroke}/>`;
-        if (h.fing){ svg += `<text x="${cx}" y="${H-22}" text-anchor="middle" font-size="10" fill="#fff" dy=".35em">${h.fing}</text>`; }
+        svg += `<circle cx="${cx}" cy="${H - 20}" r="${r}" fill="${color}" ${stroke}/>`;
+        if (h.fing) { svg += `<text x="${cx}" y="${H - 22}" text-anchor="middle" font-size="10" fill="#fff" dy=".35em">${h.fing}</text>`; }
       }
 
       svg += `</svg>`;
       keyboardDiv.innerHTML = svg;
       // click audition
-      keyboardDiv.querySelectorAll("[data-key]").forEach(el=>{
-        el.addEventListener('click', async ()=>{
+      keyboardDiv.querySelectorAll("[data-key]").forEach(el => {
+        el.addEventListener('click', async () => {
           const k = el.getAttribute('data-key'); // e.g., C4 or C#4
           const n = k.slice(0, -1), o = +k.slice(-1);
           await playNote(n, o, 0.6);
@@ -288,18 +515,26 @@
     // ===== Data (C, G demo; override by JSON loader) =====
     let data = {
       "C": {
-        "name":"Cメジャー (ハ長調)","type":"メジャー","octaves":2,
-        "right":{"ascending":[{"note":"C","oct":4,"fing":1},{"note":"D","oct":4,"fing":2},{"note":"E","oct":4,"fing":3},{"note":"F","oct":4,"fing":1},{"note":"G","oct":4,"fing":2},{"note":"A","oct":4,"fing":3},{"note":"B","oct":4,"fing":4},{"note":"C","oct":5,"fing":5},{"note":"D","oct":5,"fing":1},{"note":"E","oct":5,"fing":2},{"note":"F","oct":5,"fing":3},{"note":"G","oct":5,"fing":1},{"note":"A","oct":5,"fing":2},{"note":"B","oct":5,"fing":3},{"note":"C","oct":6,"fing":4}],
-                 "descending":[{"note":"C","oct":6,"fing":4},{"note":"B","oct":5,"fing":3},{"note":"A","oct":5,"fing":2},{"note":"G","oct":5,"fing":1},{"note":"F","oct":5,"fing":3},{"note":"E","oct":5,"fing":2},{"note":"D","oct":5,"fing":1},{"note":"C","oct":5,"fing":5},{"note":"B","oct":4,"fing":4},{"note":"A","oct":4,"fing":3},{"note":"G","oct":4,"fing":2},{"note":"F","oct":4,"fing":1},{"note":"E","oct":4,"fing":3},{"note":"D","oct":4,"fing":2},{"note":"C","oct":4,"fing":1}]},
-        "left":{"ascending":[{"note":"C","oct":4,"fing":5},{"note":"D","oct":4,"fing":4},{"note":"E","oct":4,"fing":3},{"note":"F","oct":4,"fing":2},{"note":"G","oct":4,"fing":1},{"note":"A","oct":4,"fing":3},{"note":"B","oct":4,"fing":2},{"note":"C","oct":5,"fing":1},{"note":"D","oct":5,"fing":4},{"note":"E","oct":5,"fing":3},{"note":"F","oct":5,"fing":2},{"note":"G","oct":5,"fing":1},{"note":"A","oct":5,"fing":3},{"note":"B","oct":5,"fing":2},{"note":"C","oct":6,"fing":1}],
-                "descending":[{"note":"C","oct":6,"fing":1},{"note":"B","oct":5,"fing":2},{"note":"A","oct":5,"fing":3},{"note":"G","oct":5,"fing":1},{"note":"F","oct":5,"fing":2},{"note":"E","oct":5,"fing":3},{"note":"D","oct":5,"fing":4},{"note":"C","oct":5,"fing":1},{"note":"B","oct":4,"fing":2},{"note":"A","oct":4,"fing":3},{"note":"G","oct":4,"fing":1},{"note":"F","oct":4,"fing":2},{"note":"E","oct":4,"fing":3},{"note":"D","oct":4,"fing":4},{"note":"C","oct":4,"fing":5}]}
+        "name": "Cメジャー (ハ長調)", "type": "メジャー", "octaves": 2,
+        "right": {
+          "ascending": [{ "note": "C", "oct": 4, "fing": 1 }, { "note": "D", "oct": 4, "fing": 2 }, { "note": "E", "oct": 4, "fing": 3 }, { "note": "F", "oct": 4, "fing": 1 }, { "note": "G", "oct": 4, "fing": 2 }, { "note": "A", "oct": 4, "fing": 3 }, { "note": "B", "oct": 4, "fing": 4 }, { "note": "C", "oct": 5, "fing": 5 }, { "note": "D", "oct": 5, "fing": 1 }, { "note": "E", "oct": 5, "fing": 2 }, { "note": "F", "oct": 5, "fing": 3 }, { "note": "G", "oct": 5, "fing": 1 }, { "note": "A", "oct": 5, "fing": 2 }, { "note": "B", "oct": 5, "fing": 3 }, { "note": "C", "oct": 6, "fing": 4 }],
+          "descending": [{ "note": "C", "oct": 6, "fing": 4 }, { "note": "B", "oct": 5, "fing": 3 }, { "note": "A", "oct": 5, "fing": 2 }, { "note": "G", "oct": 5, "fing": 1 }, { "note": "F", "oct": 5, "fing": 3 }, { "note": "E", "oct": 5, "fing": 2 }, { "note": "D", "oct": 5, "fing": 1 }, { "note": "C", "oct": 5, "fing": 5 }, { "note": "B", "oct": 4, "fing": 4 }, { "note": "A", "oct": 4, "fing": 3 }, { "note": "G", "oct": 4, "fing": 2 }, { "note": "F", "oct": 4, "fing": 1 }, { "note": "E", "oct": 4, "fing": 3 }, { "note": "D", "oct": 4, "fing": 2 }, { "note": "C", "oct": 4, "fing": 1 }]
+        },
+        "left": {
+          "ascending": [{ "note": "C", "oct": 4, "fing": 5 }, { "note": "D", "oct": 4, "fing": 4 }, { "note": "E", "oct": 4, "fing": 3 }, { "note": "F", "oct": 4, "fing": 2 }, { "note": "G", "oct": 4, "fing": 1 }, { "note": "A", "oct": 4, "fing": 3 }, { "note": "B", "oct": 4, "fing": 2 }, { "note": "C", "oct": 5, "fing": 1 }, { "note": "D", "oct": 5, "fing": 4 }, { "note": "E", "oct": 5, "fing": 3 }, { "note": "F", "oct": 5, "fing": 2 }, { "note": "G", "oct": 5, "fing": 1 }, { "note": "A", "oct": 5, "fing": 3 }, { "note": "B", "oct": 5, "fing": 2 }, { "note": "C", "oct": 6, "fing": 1 }],
+          "descending": [{ "note": "C", "oct": 6, "fing": 1 }, { "note": "B", "oct": 5, "fing": 2 }, { "note": "A", "oct": 5, "fing": 3 }, { "note": "G", "oct": 5, "fing": 1 }, { "note": "F", "oct": 5, "fing": 2 }, { "note": "E", "oct": 5, "fing": 3 }, { "note": "D", "oct": 5, "fing": 4 }, { "note": "C", "oct": 5, "fing": 1 }, { "note": "B", "oct": 4, "fing": 2 }, { "note": "A", "oct": 4, "fing": 3 }, { "note": "G", "oct": 4, "fing": 1 }, { "note": "F", "oct": 4, "fing": 2 }, { "note": "E", "oct": 4, "fing": 3 }, { "note": "D", "oct": 4, "fing": 4 }, { "note": "C", "oct": 4, "fing": 5 }]
+        }
       },
       "G": {
-        "name":"Gメジャー (ト長調)","type":"メジャー","octaves":2,
-        "right":{"ascending":[{"note":"G","oct":4,"fing":1},{"note":"A","oct":4,"fing":2},{"note":"B","oct":4,"fing":3},{"note":"C","oct":5,"fing":1},{"note":"D","oct":5,"fing":2},{"note":"E","oct":5,"fing":3},{"note":"F♯","oct":5,"fing":4},{"note":"G","oct":5,"fing":5},{"note":"A","oct":5,"fing":1},{"note":"B","oct":5,"fing":2},{"note":"C","oct":6,"fing":3},{"note":"D","oct":6,"fing":1},{"note":"E","oct":6,"fing":2},{"note":"F♯","oct":6,"fing":3},{"note":"G","oct":6,"fing":4}],
-                 "descending":[{"note":"G","oct":6,"fing":4},{"note":"F♯","oct":6,"fing":3},{"note":"E","oct":6,"fing":2},{"note":"D","oct":6,"fing":1},{"note":"C","oct":6,"fing":3},{"note":"B","oct":5,"fing":2},{"note":"A","oct":5,"fing":1},{"note":"G","oct":5,"fing":5},{"note":"F♯","oct":5,"fing":4},{"note":"E","oct":5,"fing":3},{"note":"D","oct":5,"fing":2},{"note":"C","oct":5,"fing":1},{"note":"B","oct":4,"fing":3},{"note":"A","oct":4,"fing":2},{"note":"G","oct":4,"fing":1}]},
-        "left":{"ascending":[{"note":"G","oct":3,"fing":5},{"note":"A","oct":3,"fing":4},{"note":"B","oct":3,"fing":3},{"note":"C","oct":4,"fing":2},{"note":"D","oct":4,"fing":1},{"note":"E","oct":4,"fing":3},{"note":"F♯","oct":4,"fing":2},{"note":"G","oct":4,"fing":1},{"note":"A","oct":4,"fing":4},{"note":"B","oct":4,"fing":3},{"note":"C","oct":5,"fing":2},{"note":"D","oct":5,"fing":1},{"note":"E","oct":5,"fing":3},{"note":"F♯","oct":5,"fing":2},{"note":"G","oct":5,"fing":1}],
-                "descending":[{"note":"G","oct":5,"fing":1},{"note":"F♯","oct":5,"fing":2},{"note":"E","oct":5,"fing":3},{"note":"D","oct":5,"fing":1},{"note":"C","oct":5,"fing":2},{"note":"B","oct":4,"fing":3},{"note":"A","oct":4,"fing":4},{"note":"G","oct":4,"fing":1},{"note":"F♯","oct":4,"fing":2},{"note":"E","oct":4,"fing":3},{"note":"D","oct":4,"fing":4},{"note":"C","oct":4,"fing":2},{"note":"B","oct":3,"fing":3},{"note":"A","oct":3,"fing":4},{"note":"G","oct":3,"fing":5}]}
+        "name": "Gメジャー (ト長調)", "type": "メジャー", "octaves": 2,
+        "right": {
+          "ascending": [{ "note": "G", "oct": 4, "fing": 1 }, { "note": "A", "oct": 4, "fing": 2 }, { "note": "B", "oct": 4, "fing": 3 }, { "note": "C", "oct": 5, "fing": 1 }, { "note": "D", "oct": 5, "fing": 2 }, { "note": "E", "oct": 5, "fing": 3 }, { "note": "F♯", "oct": 5, "fing": 4 }, { "note": "G", "oct": 5, "fing": 5 }, { "note": "A", "oct": 5, "fing": 1 }, { "note": "B", "oct": 5, "fing": 2 }, { "note": "C", "oct": 6, "fing": 3 }, { "note": "D", "oct": 6, "fing": 1 }, { "note": "E", "oct": 6, "fing": 2 }, { "note": "F♯", "oct": 6, "fing": 3 }, { "note": "G", "oct": 6, "fing": 4 }],
+          "descending": [{ "note": "G", "oct": 6, "fing": 4 }, { "note": "F♯", "oct": 6, "fing": 3 }, { "note": "E", "oct": 6, "fing": 2 }, { "note": "D", "oct": 6, "fing": 1 }, { "note": "C", "oct": 6, "fing": 3 }, { "note": "B", "oct": 5, "fing": 2 }, { "note": "A", "oct": 5, "fing": 1 }, { "note": "G", "oct": 5, "fing": 5 }, { "note": "F♯", "oct": 5, "fing": 4 }, { "note": "E", "oct": 5, "fing": 3 }, { "note": "D", "oct": 5, "fing": 2 }, { "note": "C", "oct": 5, "fing": 1 }, { "note": "B", "oct": 4, "fing": 3 }, { "note": "A", "oct": 4, "fing": 2 }, { "note": "G", "oct": 4, "fing": 1 }]
+        },
+        "left": {
+          "ascending": [{ "note": "G", "oct": 3, "fing": 5 }, { "note": "A", "oct": 3, "fing": 4 }, { "note": "B", "oct": 3, "fing": 3 }, { "note": "C", "oct": 4, "fing": 2 }, { "note": "D", "oct": 4, "fing": 1 }, { "note": "E", "oct": 4, "fing": 3 }, { "note": "F♯", "oct": 4, "fing": 2 }, { "note": "G", "oct": 4, "fing": 1 }, { "note": "A", "oct": 4, "fing": 4 }, { "note": "B", "oct": 4, "fing": 3 }, { "note": "C", "oct": 5, "fing": 2 }, { "note": "D", "oct": 5, "fing": 1 }, { "note": "E", "oct": 5, "fing": 3 }, { "note": "F♯", "oct": 5, "fing": 2 }, { "note": "G", "oct": 5, "fing": 1 }],
+          "descending": [{ "note": "G", "oct": 5, "fing": 1 }, { "note": "F♯", "oct": 5, "fing": 2 }, { "note": "E", "oct": 5, "fing": 3 }, { "note": "D", "oct": 5, "fing": 1 }, { "note": "C", "oct": 5, "fing": 2 }, { "note": "B", "oct": 4, "fing": 3 }, { "note": "A", "oct": 4, "fing": 4 }, { "note": "G", "oct": 4, "fing": 1 }, { "note": "F♯", "oct": 4, "fing": 2 }, { "note": "E", "oct": 4, "fing": 3 }, { "note": "D", "oct": 4, "fing": 4 }, { "note": "C", "oct": 4, "fing": 2 }, { "note": "B", "oct": 3, "fing": 3 }, { "note": "A", "oct": 3, "fing": 4 }, { "note": "G", "oct": 3, "fing": 5 }]
+        }
       }
     };
 
@@ -309,109 +544,113 @@
     let playTimer = null;
     const tempo = document.getElementById('tempo');
     const tempoValEl = document.getElementById('tempoVal');
-    tempo.addEventListener('input', ()=> tempoValEl.textContent = tempo.value);
+    tempo.addEventListener('input', () => tempoValEl.textContent = tempo.value);
     tempoValEl.textContent = tempo.value;
 
     const keyButtons = document.getElementById('keyButtons');
-    function renderKeyButtons(){
+    function renderKeyButtons() {
       keyButtons.innerHTML = "";
-      Object.keys(data).forEach(k=>{
+      Object.keys(data).forEach(k => {
         const btn = document.createElement('button');
-        btn.className = 'key'+(k===currentKey?' active':'');
+        btn.className = 'key' + (k === currentKey ? ' active' : '');
         btn.textContent = k;
-        btn.onclick = ()=>{ currentKey=k; document.querySelectorAll('.key').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); renderAll(); };
+        btn.onclick = () => { currentKey = k; document.querySelectorAll('.key').forEach(b => b.classList.remove('active')); btn.classList.add('active'); renderAll(); };
         keyButtons.appendChild(btn);
       });
     }
 
-    function chips(elId, seq){
+    function chips(elId, seq) {
       const el = document.getElementById(elId);
       el.innerHTML = "";
-      (seq||[]).forEach(n=>{
-        const d=document.createElement('div'); d.className='chip';
+      (seq || []).forEach(n => {
+        const d = document.createElement('div'); d.className = 'chip';
         d.textContent = `${n.note} ${n.oct} / 指${n.fing}`; el.appendChild(d);
       });
     }
 
-    function renderAll(){
+    function renderAll() {
       renderKeyButtons();
       const k = data[currentKey];
       const info = document.getElementById('info');
       info.innerHTML = `<h3>情報</h3><div class="chips">
-        <div class="chip">調名: ${k.name||currentKey}</div>
-        <div class="chip">タイプ: ${k.type||"メジャー"}</div>
-        <div class="chip">オクターブ: ${k.octaves||2}</div>
+        <div class="chip">調名: ${k.name || currentKey}</div>
+        <div class="chip">タイプ: ${k.type || "メジャー"}</div>
+        <div class="chip">オクターブ: ${k.octaves || 2}</div>
       </div>`;
       chips('rhAsc', k.right?.ascending); chips('rhDesc', k.right?.descending);
       chips('lhAsc', k.left?.ascending); chips('lhDesc', k.left?.descending);
 
       const hi = [];
-      (k.right?.ascending||[]).forEach(n=>hi.push({name:n.note,oct:n.oct,hand:"R",fing:n.fing}));
-      (k.left?.ascending||[]).forEach(n=>hi.push({name:n.note,oct:n.oct,hand:"L",fing:n.fing}));
+      (k.right?.ascending || []).forEach(n => hi.push({ name: n.note, oct: n.oct, hand: "R", fing: n.fing }));
+      (k.left?.ascending || []).forEach(n => hi.push({ name: n.note, oct: n.oct, hand: "L", fing: n.fing }));
       renderFullKeyboard(hi, null);
     }
 
-    function stop(){ playing=false; if (playTimer){ clearTimeout(playTimer); playTimer=null; } renderAll(); }
+    function stop() { playing = false; if (playTimer) { clearTimeout(playTimer); playTimer = null; } renderAll(); }
     document.getElementById('btnStop').onclick = stop;
 
-    async function playSeq(seq, hand){
+    async function playSeq(seq, hand) {
       if (!seq || !seq.length) return;
-      const seq2 = seq.concat([seq[seq.length-1]]);
-      playing = true; let i=0; const ms = 60000 / (+tempo.value);
-      const step = async ()=>{
-        if (!playing){ stop(); return; }
-        if (i>=seq2.length){ stop(); return; }
+      const seq2 = seq;
+      playing = true; let i = 0; const ms = 60000 / (+tempo.value);
+      const step = async () => {
+        if (!playing) { stop(); return; }
+        if (i >= seq2.length) { stop(); return; }
         const n = seq2[i++];
         await playNote(n.note, n.oct, 0.8);
-        const hi = seq2.map(x=>({name:x.note,oct:x.oct,hand:hand,fing:x.fing}));
-        renderFullKeyboard(hi, {name:n.note,oct:n.oct});
+        const hi = seq2.map(x => ({ name: x.note, oct: x.oct, hand: hand, fing: x.fing }));
+        renderFullKeyboard(hi, { name: n.note, oct: n.oct });
         playTimer = setTimeout(step, ms);
       }; step();
     }
 
-    async function playBothAsc(k){
+    async function playBothAsc(k) {
       const R0 = k.right?.ascending || [], L0 = k.left?.ascending || [];
-      const R = R0.length? R0.concat([R0[R0.length-1]]) : R0;
-      const L = L0.length? L0.concat([L0[L0.length-1]]) : L0;
+      const R = k.right?.ascending || [];
+      const L = k.left?.ascending || [];
       const len = Math.max(R.length, L.length);
       const ms = 60000 / (+tempo.value);
-      playing = true; let i=0;
-      const step = async ()=>{
-        if (!playing){ stop(); return; }
-        if (i>=len){ stop(); return; }
-        const r = R[i] || null, l = L[i] || null;
+      playing = true; let i = 0;
+
+      const step = async () => {
+        if (!playing) { stop(); return; }
+        if (i >= len) { stop(); return; }
+        const r = R[i];
+        const l = L[i];
         const hi = [];
-        if (r){ await playNote(r.note, r.oct, 0.8); hi.push({name:r.note,oct:r.oct,hand:"R",fing:r.fing}); }
-        if (l){ await playNote(l.note, l.oct, 0.8); hi.push({name:l.note,oct:l.oct,hand:"L",fing:l.fing}); }
-        renderFullKeyboard(hi, hi[0]||hi[1]||null);
+        if (r) { await playNote(r.note, r.oct, 0.8); hi.push({ name: r.note, oct: r.oct, hand: "R", fing: r.fing }); }
+        if (l) { await playNote(l.note, l.oct, 0.8); hi.push({ name: l.note, oct: l.oct, hand: "L", fing: l.fing }); }
+        renderFullKeyboard(hi, hi[0] || hi[1] || null);
         i++; playTimer = setTimeout(step, ms);
-      }; step();
+      };
+      step();
     }
 
-    document.querySelectorAll('.btn.play').forEach(b=>{
-      b.addEventListener('click', async ()=>{
+    document.querySelectorAll('.btn.play').forEach(b => {
+      b.addEventListener('click', async () => {
         const k = data[currentKey];
         stop();
         const modeAttr = b.getAttribute('data-mode');
-        if (modeAttr==="R-asc") await playSeq(k.right?.ascending, "R");
-        if (modeAttr==="R-desc") await playSeq(k.right?.descending, "R");
-        if (modeAttr==="L-asc") await playSeq(k.left?.ascending, "L");
-        if (modeAttr==="L-desc") await playSeq(k.left?.descending, "L");
-        if (modeAttr==="both-asc") await playBothAsc(k);
+        if (modeAttr === "R-asc") await playSeq(k.right?.ascending, "R");
+        if (modeAttr === "R-desc") await playSeq(k.right?.descending, "R");
+        if (modeAttr === "L-asc") await playSeq(k.left?.ascending, "L");
+        if (modeAttr === "L-desc") await playSeq(k.left?.descending, "L");
+        if (modeAttr === "both-asc") await playBothAsc(k);
       });
     });
 
-    document.getElementById('btnLoad').addEventListener('click', async ()=>{
+    document.getElementById('btnLoad').addEventListener('click', async () => {
       const f = document.getElementById('jsonFile').files?.[0];
-      if(!f){ alert("JSONファイルを選択してください"); return; }
-      try{
+      if (!f) { alert("JSONファイルを選択してください"); return; }
+      try {
         const t = await f.text(); const obj = JSON.parse(t);
         data = obj; currentKey = Object.keys(data)[0] || "C"; stop(); renderAll();
-      }catch(e){ alert("JSON読み込みエラー: "+e.message); }
+      } catch (e) { alert("JSON読み込みエラー: " + e.message); }
     });
 
     // Init
     renderAll();
   </script>
 </body>
+
 </html>
