@@ -108,6 +108,45 @@ input[type="range"] {
   cursor: pointer
 }
 
+.mode-select {
+  color: var(--brand);
+  border-color: var(--brand)
+}
+
+.mode-select[data-hand="R"] {
+  color: var(--R);
+  border-color: var(--R)
+}
+
+.mode-select[data-hand="L"] {
+  color: var(--L);
+  border-color: var(--L)
+}
+
+.mode-select[data-hand="B"] {
+  color: var(--B);
+  border-color: var(--B)
+}
+
+.mode-select.active {
+  color: #fff
+}
+
+.mode-select.active[data-hand="R"] {
+  background: var(--R);
+  border-color: var(--R)
+}
+
+.mode-select.active[data-hand="L"] {
+  background: var(--L);
+  border-color: var(--L)
+}
+
+.mode-select.active[data-hand="B"] {
+  background: var(--B);
+  border-color: var(--B)
+}
+
 .play {
   background: #16a34a;
   border-color: #15803d;

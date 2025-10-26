@@ -177,7 +177,7 @@ let data = {
   "C": {
     "name": "Cメジャー (ハ長調)", "type": "メジャー", "octaves": 2,
     "right": {
-      "ascending": [{ "note": "C", "oct": 4, "fing": 1 }, { "note": "D", "oct": 4, "fing": 2 }, { "note": "E", "oct": 4, "fing": 3 }, { "note": "F", "oct": 4, "fing": 1 }, { "note": "G", "oct": 4, "fing": 2 }, { "note": "A", "oct": 4, "fing": 3 }, { "note": "B", "oct": 4, "fing": 4 }, { "note": "C", "oct": 5, "fing": 5 }, { "note": "D", "oct": 5, "fing": 1 }, { "note": "E", "oct": 5, "fing": 2 }, { "note": "F", "oct": 5, "fing": 3 }, { "note": "G", "oct": 5, "fing": 1 }, { "note": "A", "oct": 5, "fing": 2 }, { "note": "B", "oct": 5, "fing": 3 }, { "note": "C", "oct": 6, "fing": 4 }],
+      "ascending": [{ "note": "C", "oct": 4, "fing": 1 }, { "note": "D", "oct": 4, "fing": 2 }, { "note": "E", "oct": 4, "fing": 3 }, { "note": "F", "oct": 4, "fing": 1 }, { "note": "G", "oct": 4, "fing": 2 }, { "note": "A", "oct": 4, "fing": 3 }, { "note": "B", "oct": 4, "fing": 4 }, { "note": "C", "oct": 5, "fing": 5 }, { "note": "D", "oct": 5, "fing": 1 }, { "note": "E", "oct": 5, "fing": 2 }, { "note": "F", "oct": 5, "fing": 3 }, { "note": "G", "oct": 5, "fing": 1 }, { "note": "A", "oct": 5, "fing": 2 }, { "note": "B", "oct": 5, "fing": 3 }, { "note": "C", "oct": 6, "fing": 5 }],
       "descending": [{ "note": "C", "oct": 6, "fing": 4 }, { "note": "B", "oct": 5, "fing": 3 }, { "note": "A", "oct": 5, "fing": 2 }, { "note": "G", "oct": 5, "fing": 1 }, { "note": "F", "oct": 5, "fing": 3 }, { "note": "E", "oct": 5, "fing": 2 }, { "note": "D", "oct": 5, "fing": 1 }, { "note": "C", "oct": 5, "fing": 5 }, { "note": "B", "oct": 4, "fing": 4 }, { "note": "A", "oct": 4, "fing": 3 }, { "note": "G", "oct": 4, "fing": 2 }, { "note": "F", "oct": 4, "fing": 1 }, { "note": "E", "oct": 4, "fing": 3 }, { "note": "D", "oct": 4, "fing": 2 }, { "note": "C", "oct": 4, "fing": 1 }]
     },
     "left": {
@@ -202,19 +202,39 @@ let data = {
 let currentKey = "C";
 let playing = false;
 let playTimer = null;
+let highlightEnabled = false;
 const tempo = document.getElementById('tempo');
 const tempoValEl = document.getElementById('tempoVal');
 tempo.addEventListener('input', () => tempoValEl.textContent = tempo.value);
 tempoValEl.textContent = tempo.value;
 
 const keyButtons = document.getElementById('keyButtons');
+const modeButtons = Array.from(document.querySelectorAll('.btn.mode-select'));
+const stopButton = document.getElementById('btnStop');
+const playMainButton = document.getElementById('btnPlayMain');
+
+let currentPlayMode = modeButtons.find(btn => btn.dataset.mode === 'R-asc')?.dataset.mode
+  || modeButtons[0]?.dataset.mode
+  || null;
+
+function renderModeButtons() {
+  modeButtons.forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.mode === currentPlayMode);
+  });
+}
+
 function renderKeyButtons() {
   keyButtons.innerHTML = "";
   Object.keys(data).forEach(k => {
     const btn = document.createElement('button');
-    btn.className = 'key' + (k === currentKey ? ' active' : '');
+    const isActive = highlightEnabled && (k === currentKey);
+    btn.className = 'key' + (isActive ? ' active' : '');
     btn.textContent = k;
-    btn.onclick = () => { currentKey = k; document.querySelectorAll('.key').forEach(b => b.classList.remove('active')); btn.classList.add('active'); renderAll(); };
+    btn.onclick = () => {
+      currentKey = k;
+      highlightEnabled = true;
+      stop();
+    };
     keyButtons.appendChild(btn);
   });
 }
@@ -226,6 +246,27 @@ function chips(elId, seq) {
     const d = document.createElement('div'); d.className = 'chip';
     d.textContent = `${n.note} ${n.oct} / 指${n.fing}`; el.appendChild(d);
   });
+}
+
+function sequenceHighlights(seq, hand) {
+  return (seq || []).map(n => ({ name: n.note, oct: n.oct, hand, fing: n.fing }));
+}
+
+function buildHighlight(keyData, mode) {
+  if (!keyData || !mode) return [];
+  switch (mode) {
+    case "R-asc": return sequenceHighlights(keyData.right?.ascending, "R");
+    case "R-desc": return sequenceHighlights(keyData.right?.descending, "R");
+    case "L-asc": return sequenceHighlights(keyData.left?.ascending, "L");
+    case "L-desc": return sequenceHighlights(keyData.left?.descending, "L");
+    case "both-asc":
+      return [
+        ...sequenceHighlights(keyData.right?.ascending, "R"),
+        ...sequenceHighlights(keyData.left?.ascending, "L")
+      ];
+    default:
+      return [];
+  }
 }
 
 function renderAll() {
@@ -241,14 +282,20 @@ function renderAll() {
   chips('rhAsc', k.right?.ascending); chips('rhDesc', k.right?.descending);
   chips('lhAsc', k.left?.ascending); chips('lhDesc', k.left?.descending);
 
-  const hi = [];
-  (k.right?.ascending || []).forEach(n => hi.push({ name: n.note, oct: n.oct, hand: "R", fing: n.fing }));
-  (k.left?.ascending || []).forEach(n => hi.push({ name: n.note, oct: n.oct, hand: "L", fing: n.fing }));
+  const hi = highlightEnabled ? buildHighlight(k, currentPlayMode) : [];
   renderFullKeyboard(hi, null);
+  renderModeButtons();
 }
 
-function stop() { playing = false; if (playTimer) { clearTimeout(playTimer); playTimer = null; } renderAll(); }
-document.getElementById('btnStop').onclick = stop;
+function stop() {
+  playing = false;
+  if (playTimer) {
+    clearTimeout(playTimer);
+    playTimer = null;
+  }
+  renderAll();
+}
+stopButton?.addEventListener('click', () => stop());
 
 // ---- Single-hand playback (no duplicate last note)
 async function playSeq(seq, hand) {
@@ -305,28 +352,43 @@ async function playBothAsc(k) {
   tick();
 }
 
-document.querySelectorAll('.btn.play').forEach(b => {
-  b.addEventListener('click', async () => {
-    const k = data[currentKey];
+modeButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const modeAttr = btn.getAttribute('data-mode');
+    if (!modeAttr) return;
+    if (currentPlayMode !== modeAttr) currentPlayMode = modeAttr;
     stop();
-    const modeAttr = b.getAttribute('data-mode');
-    if (modeAttr === "R-asc") await playSeq(k.right?.ascending, "R");
-    if (modeAttr === "R-desc") await playSeq(k.right?.descending, "R");
-    if (modeAttr === "L-asc") await playSeq(k.left?.ascending, "L");
-    if (modeAttr === "L-desc") await playSeq(k.left?.descending, "L");
-    if (modeAttr === "both-asc") await playBothAsc(k);
   });
 });
+
+async function playCurrentMode() {
+  if (!currentPlayMode) return;
+  const k = data[currentKey];
+  if (!k) return;
+  highlightEnabled = true;
+  stop();
+  if (currentPlayMode === "R-asc") await playSeq(k.right?.ascending, "R");
+  if (currentPlayMode === "R-desc") await playSeq(k.right?.descending, "R");
+  if (currentPlayMode === "L-asc") await playSeq(k.left?.ascending, "L");
+  if (currentPlayMode === "L-desc") await playSeq(k.left?.descending, "L");
+  if (currentPlayMode === "both-asc") await playBothAsc(k);
+}
+
+playMainButton?.addEventListener('click', () => { playCurrentMode(); });
+document.getElementById('playBtn')?.addEventListener('click', () => { playCurrentMode(); });
+document.getElementById('stopBtn')?.addEventListener('click', () => { stop(); });
 
 document.getElementById('btnLoad').addEventListener('click', async () => {
   const f = document.getElementById('jsonFile').files?.[0];
   if (!f) { alert("JSONファイルを選択してください"); return; }
   try {
     const t = await f.text(); const obj = JSON.parse(t);
-    data = obj; currentKey = Object.keys(data)[0] || "C"; stop(); renderAll();
+    data = obj;
+    currentKey = Object.keys(data)[0] || "C";
+    highlightEnabled = false;
+    stop();
   } catch (e) { alert("JSON読み込みエラー: " + e.message); }
 });
 
 // Init
 renderAll();
-

@@ -15,11 +15,6 @@
     <h1>🎹 ピアノスケール v8</h1>
     <div class="sub">88鍵フル表示。<strong>ユニゾンの完全同時化</strong>、<strong>最後の音の二重鳴り解消</strong>。音色は 正弦波 / ピアノ（Tone.js Sampler）。
     </div>
-    <div id="controls">
-      <button id="playBtn">Play</button>
-      <button id="stopBtn" disabled>Stop</button>
-    </div>
-
     <div class="row">
       <div class="keys" id="keyButtons"></div>
       <div class="controls">
@@ -31,12 +26,14 @@
     </div>
 
     <div class="buttons">
-      <button class="btn play" data-mode="R-asc">右手 上行</button>
-      <button class="btn play" data-mode="R-desc">右手 下行</button>
-      <button class="btn play" data-mode="L-asc">左手 上行</button>
-      <button class="btn play" data-mode="L-desc">左手 下行</button>
-      <button class="btn play" data-mode="both-asc">両手 同時（上行ユニゾン）</button>
+      <button class="btn mode-select" data-mode="R-asc" data-hand="R">右手 上行</button>
+      <button class="btn mode-select" data-mode="R-desc" data-hand="R">右手 下行</button>
+      <button class="btn mode-select" data-mode="L-asc" data-hand="L">左手 上行</button>
+      <button class="btn mode-select" data-mode="L-desc" data-hand="L">左手 下行</button>
+      <button class="btn mode-select" data-mode="both-asc" data-hand="B">両手 同時（上行ユニゾン）</button>
+      <button class="btn play" id="btnPlayMain">Play</button>
       <button class="btn stop" id="btnStop">停止</button>
+
     </div>
 
     <div class="grid">
